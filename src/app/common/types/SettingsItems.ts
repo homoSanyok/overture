@@ -1,0 +1,1 @@
+export type SettingsItemsT = "plus";

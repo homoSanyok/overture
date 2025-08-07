@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="container__content">
+    @for (link of links; track link.id) {
+      <app-button [link]="link"
+                  [selected]="selectedLink?.id === link.id"
+                  (click)="onClickLink(link)"
+      ></app-button>
+    }
+  </div>
+  <app-settings-button></app-settings-button>
+</div>

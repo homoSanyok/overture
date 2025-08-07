@@ -1,0 +1,29 @@
+<div class="container"
+     [formGroup]="controls">
+  <mat-form-field>
+    <mat-label>Название элемента</mat-label>
+    <input matInput formControlName="label">
+    @if (controls.controls.label.hasError("empty")) {
+      <mat-error>Значение не должно быть пустым</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="container__icon">
+    <mat-label>Ссылка на иконку</mat-label>
+    <input matInput formControlName="iconSrc">
+  </mat-form-field>
+
+  <mat-form-field class="container__path">
+    <mat-label>Ссылка на ресурс</mat-label>
+    <input matInput formControlName="path">
+    @if (controls.controls.path.hasError("empty")) {
+      <mat-error>Значение не должно быть пустым</mat-error>
+    }
+  </mat-form-field>
+
+  <button mat-button
+          class="container__button"
+          (click)="onSave()">
+    Сохранить
+  </button>
+</div>

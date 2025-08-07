@@ -1,0 +1,17 @@
+:host {
+  position: absolute;
+  left: calc(100% + 8px);
+
+  z-index: 10;
+}
+
+.container {
+  display: flex;
+  background: #D1F0C2;
+  transition: width 200ms;
+
+  border-radius: 0 8px 0 8px;
+
+  width: 0;
+  overflow: hidden;
+}

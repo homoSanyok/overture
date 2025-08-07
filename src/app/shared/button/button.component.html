@@ -1,0 +1,9 @@
+<div class="container" #componentRef
+     (mouseenter)="onMouseEnter()"
+     (mouseleave)="onMouseLeave()">
+  @if (icon) {
+    <img [src]="icon" width="24" height="24"/>
+  } @else {
+    <img src="/image.svg" width="24" height="24"/>
+  }
+</div>

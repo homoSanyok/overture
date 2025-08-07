@@ -1,0 +1,21 @@
+:host {
+  margin-top: auto;
+  position: relative;
+}
+
+.container {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  background: #D1F0C2;
+  transition: background, width 200ms;
+
+  user-select: none;
+}
