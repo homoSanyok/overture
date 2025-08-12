@@ -1,16 +1,19 @@
 /**
  * @module ContentComponent
  */
-import {Component, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
-import {SettingsService} from '../../../services/settings.service';
-import {SettingsPlusComponent} from '../settings-plus/settings-plus.component';
+import { Component, effect, ElementRef, inject, untracked, viewChild } from '@angular/core';
+import { SettingsService } from '../../../services/settings.service';
+import { IframeComponent } from '../iframe/iframe.component';
+import { SettingsMenuEditComponent } from "../settings-menu-edit/settings-menu-edit.component";
 
 @Component({
   selector: 'app-content',
   standalone: true,
   imports: [
-    SettingsPlusComponent
-  ],
+    SettingsMenuEditComponent,
+    IframeComponent,
+    SettingsMenuEditComponent
+],
   templateUrl: './content.component.html',
   styleUrl: './content.component.scss'
 })
@@ -49,14 +52,20 @@ export class ContentComponent {
       const componentElement = componentRef.nativeElement;
 
       switch (selectedMenu) {
-        case "plus": {
+        case "edit": {
           componentElement.style.width = "60%";
           componentElement.style.height = "40%";
+
+          componentElement.style.maxWidth = "900px";
+          componentElement.style.minHeight = "400px";
           break;
         }
         default: {
           componentElement.style.width = "100%";
           componentElement.style.height = "100%";
+
+          componentElement.style.maxWidth = "unset";
+          componentElement.style.minHeight = "unset";
         }
       }
     });

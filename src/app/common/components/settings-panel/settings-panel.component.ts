@@ -24,7 +24,7 @@ export class SettingsPanelComponent {
 
   readonly links: LinkT[] = [
     {
-      id: "plus" as SettingsItemsT,
+      id: "edit" as SettingsItemsT,
       iconSrc: "/plus.svg",
       label: "",
       path: ""
@@ -40,25 +40,40 @@ export class SettingsPanelComponent {
   private readonly componentRef = viewChild<ElementRef<HTMLDivElement>>('componentRef');
 
   /**
-   * Сигнал хранит состояние имени выбранной кнопки.
-   * @private
+   * Получение текущего выбранного меню для шаблона&
    */
-  readonly selectedButton = signal<SettingsItemsT | undefined>(undefined);
+  get selectedMenu() {
+    const selectedEditingLink = this.settings.selectedEditingLink();
+    if (selectedEditingLink) return;
+
+    return this.settings.selectedMenu();
+  }
 
   /**
-   * Функция обработки нажатия на кнопку.
+   * Функция обработки нажатия по кнопке.
    * По нажатии задаёт сигналу {@link selectedButton} значение `id` из параметра.
    * Если нажатие было произведено по уже выбранной кнопке, задаёт {@link selectedButton} `undefined`.
    * @param id
    */
   onClick(id: string) {
-    const selectedButton = this.selectedButton();
-    if (selectedButton === id) {
-      this.selectedButton.set(undefined);
+    const selectedMenu = this.settings.selectedMenu();
+    const selectedEditingLink = this.settings.selectedEditingLink();
+
+    if (selectedEditingLink) {
+      // Если выбран элемент для редактирования
+      this.settings.selectedMenu.set(id as SettingsItemsT);
+      this.settings.selectedEditingLink.set(undefined);
       return;
     }
 
-    this.selectedButton.set(id as SettingsItemsT);
+    if (selectedMenu === id) {
+      // При нажатии по уже выбранной кнопке
+      this.settings.selectedMenu.set(undefined);
+      return;
+    }
+
+    // Задаём сигналу выбранное меню
+    this.settings.selectedMenu.set(id as SettingsItemsT);
   }
 
   /**
@@ -81,23 +96,11 @@ export class SettingsPanelComponent {
         return;
       }
       componentElement.style.width = "0";
-      this.selectedButton.set(undefined);
+      this.settings.selectedMenu.set(undefined);
     });
-  }
-
-  /**
-   * Функция обработки изменения состояния сигнала {@link selectedButton}.
-   * Задаёт сигналу `selectedMenu` сервиса {@link settings} значение равное состоянию сигнала {@link selectedButton}.
-   * @private
-   */
-  private onSelectedButtonChanged() {
-    const selectedButton = this.selectedButton();
-
-    untracked(() => this.settings.selectedMenu.set(selectedButton));
   }
 
   constructor() {
     effect(this.onSettingsOpen.bind(this));
-    effect(this.onSelectedButtonChanged.bind(this));
   }
 }

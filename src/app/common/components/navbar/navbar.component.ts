@@ -39,19 +39,61 @@ export class NavbarComponent {
   }
 
   /**
+   * Получение текущего выбранного для редактирвоания
+   */
+  get selectedEditingLink() {
+    return this.settings.selectedEditingLink();
+  }
+
+  /**
    * Обработка клика по кнопке ссылки.
    * Задаёт сигналу `selectedLink` сервиса {@link SettingsService} значение
    * выбранной ссылки, либо `undefined`, если было произведено нажатие
    * на уже выбранную ссылку.
-   * @param link
+   *
+   * @param link - выбранный элемент ссылки.
    */
   onClickLink(link: LinkT) {
     const selectedLink = this.settings.selectedLink();
+    const selectedEditingLink = this.settings.selectedEditingLink();
+
+    if (selectedEditingLink) {
+      if (selectedLink?.id !== link.id) {
+        this.settings.selectedLink.set(link);
+      }
+
+      this.settings.selectedEditingLink.set(undefined);
+      return;
+    }
+
     if (!selectedLink || selectedLink.id !== link.id) {
       this.settings.selectedLink.set(link);
       return;
     }
 
     this.settings.selectedLink.set(undefined);
+  }
+
+  /**
+   * Обработка клика по кнопке редактирования ссылки.
+   * Задаёт сигналу `selectedEditingLink` сервиса {@link SettingsService} значение
+   * выбранной ссылки, либо `undefined`, если было произведено нажатие
+   * на уже выбранную ссылку.
+   *
+   * @param link - выбранный элемент ссылки.
+   */
+  onClickEditingLink(link: LinkT) {
+    const selectedEditingLink = this.settings.selectedEditingLink();
+    if (selectedEditingLink?.id === link.id) {
+      // При нажатии по уже выбранной кнопке
+      // Убираем выбор меню и кнопки
+      this.settings.selectedEditingLink.set(undefined);
+      this.settings.selectedMenu.set(undefined);
+      return;
+    }
+
+    // Задаём сигналу выбранную кнопку и выбираем меню
+    this.settings.selectedEditingLink.set(link);
+    this.settings.selectedMenu.set("edit");
   }
 }

@@ -15,5 +15,11 @@ import {ContentComponent} from './common/components/content/content.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-
+  readonly theme = {
+    "token": {
+      "colorPrimary": "#74c43f",
+      "colorInfo": "#74c43f",
+      "colorBgBase": "#ffffff"
+    }
+  };
 }

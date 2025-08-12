@@ -94,11 +94,11 @@ export class SettingsButtonComponent {
 
       if (hovered) {
         // Если мышь наведена, задать цвет фона
-        componentElement.style.background = "#B3E69A";
+        componentElement.style.background = "var(--p-primary-200)";
         return;
       }
       // Если мышь не наведена, задать цвет фона
-      componentElement.style.background = "#D1F0C2";
+      componentElement.style.background = "var(--p-primary-100)";
     });
   }
 
@@ -117,17 +117,20 @@ export class SettingsButtonComponent {
       const componentElement = componentRef.nativeElement;
 
       if (selected) {
+        // Если кнопка выбрана
         componentElement.style.width = "70px";
-        componentElement.style.background = "#74C43F";
+        componentElement.style.background = "var(--p-primary-500)";
         this.settings.open.set(true);
       } else {
         componentElement.style.width = "38px";
         this.settings.open.set(false);
 
         if (componentElement.matches(":hover")) {
-          componentElement.style.background = "#B3E69A";
+          // Если кнопка не выбрана и мышь наведена
+          componentElement.style.background = "var(--p-primary-200)";
         } else {
-          componentElement.style.background = "#D1F0C2";
+          // Если кнопка не выбрана и мышь не наведена
+          componentElement.style.background = "var(--p-primary-100)";
         }
       }
     });

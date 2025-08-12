@@ -1,0 +1,62 @@
+<div class="container" [formGroup]="controls">
+  <div>
+    <p-floatlabel class="flex flex-col gap-1" variant="on">
+      <input pInputText
+             formControlName="label"
+             id="settings-menu-edit-input-label"
+             [fluid]="true"
+             [class]="controls.controls.label.hasError('empty') ? 'ng-invalid ng-dirty' : ''"/>
+      <label for="settings-menu-edit-input-label">Название элемента</label>
+    </p-floatlabel>
+    @if (controls.controls.label.hasError("empty")) {
+      <p-message severity="error"
+                 size="small"
+                 variant="simple">
+        Значение не должно быть пустым
+      </p-message>
+    }
+  </div>
+
+  <p-floatlabel variant="on" class="container__icon">
+    <input pInputText
+           formControlName="iconSrc"
+           id="settings-menu-edit-input-iconSrc"
+           [fluid]="true"/>
+    <label for="settings-menu-edit-input-iconSrc">Ссылка на иконку</label>
+  </p-floatlabel>
+
+  <div class="container__path">
+    <p-floatlabel variant="on">
+      <input pInputText
+             formControlName="path"
+             id="settings-menu-edit-input-path"
+             [fluid]="true"
+             [class]="controls.controls.path.hasError('empty') ? 'ng-invalid ng-dirty' : ''"/>
+      <label for="settings-menu-edit-input-path">Ссылка на ресурс</label>
+    </p-floatlabel>
+    @if (controls.controls.path.hasError("empty")) {
+      <p-message severity="error"
+                 size="small"
+                 variant="simple">
+        Значение не должно быть пустым
+      </p-message>
+    }
+  </div>
+
+  <div class="container__buttons">
+    @if (isEditing) {
+      <p-button class="container__buttons-delete"
+                label="Удалить"
+                severity="danger"
+                variant="outlined"
+                size="small"
+                (click)="onRemove()"/>
+    }
+
+    <p-button class="container__buttons-save"
+              label="Сохранить"
+              variant="outlined"
+              size="small"
+              (click)="onSave()"/>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <div class="container" #componentRef>
   @for (link of links; track link.id) {
     <app-button [link]="link"
-                [selected]="selectedButton() === link.id"
+                [selected]="selectedMenu === link.id"
                 (click)="onClick(link.id)"
     ></app-button>
   }

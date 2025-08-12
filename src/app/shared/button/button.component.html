@@ -1,9 +1,22 @@
-<div class="container" #componentRef
-     (mouseenter)="onMouseEnter()"
-     (mouseleave)="onMouseLeave()">
+<div
+  class="container"
+  [style.width]="_size === 'm' ? '38px' : '24px'"
+  [style.height]="_size === 'm' ? '38px' : '24px'"
+  #componentRef
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
   @if (icon) {
-    <img [src]="icon" width="24" height="24"/>
+  <img
+    [src]="icon"
+    [width]="_size === 'm' ? 24 : 16"
+    [height]="_size === 'm' ? 24 : 16"
+  />
   } @else {
-    <img src="/image.svg" width="24" height="24"/>
+  <img
+    src="/image.svg"
+    [width]="_size === 'm' ? 24 : 16"
+    [height]="_size === 'm' ? 24 : 16"
+  />
   }
 </div>

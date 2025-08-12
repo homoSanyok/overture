@@ -12,14 +12,20 @@
 
   &__icon {
     margin-top: auto;
+    margin-bottom: 16px;
   }
 
   &__path {
     margin-bottom: auto;
   }
 
-  &__button {
-    width: max-content;
-    margin-left: auto;
+  &__buttons {
+    width: 100%;
+    display: flex;
+
+    &-save {
+        margin-left: auto;
+        width: max-content;
+    }
   }
 }

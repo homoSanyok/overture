@@ -18,11 +18,14 @@ export class SettingsService {
   readonly selectedMenu = signal<SettingsItemsT | undefined>(undefined);
 
   /**
-   * Сигнал хранит состояние выбранного для редактирования элемента.
-   * Если значение сигнала {@link selectedMenu} `plus` и выбранный элемент равен `undefined`,
-   * значит создаётся новй элемент.
+   * Сигнал хранит состояние выбранного элемента link.
    */
   readonly selectedLink = signal<LinkT | undefined>(undefined);
+
+  /**
+   * Сигнал хранит состояние выбранного элемента link для редактирвания.
+   */
+  readonly selectedEditingLink = signal<LinkT | undefined>(undefined);
 
   /**
    * Сигнал хранит состояние списка всех доступных элементов ссылок системы.
@@ -40,6 +43,13 @@ export class SettingsService {
   private onLinksChanged() {
     const links = this.links();
     if (!links) return;
+
+    untracked(() => {
+      const selectedLink = this.selectedLink();
+      if (!selectedLink) return;
+
+      this.selectedLink.set(links.find(link => link.id === selectedLink.id));
+    });
 
     localStorage.setItem("links", JSON.stringify(links));
   }
@@ -60,8 +70,29 @@ export class SettingsService {
     this.links.set(parsedLinks);
   }
 
+  /**
+   * Обработка изменения состояния открытия меню настроек {@link open}.
+   * Если меню закрыто, задаёт сигналу {@link selectedMenu},
+   * определяющему текущее открытое меню настроек, значение `undefined`.
+   *
+   * Также обнуляет {@link selectedEditingLink}.
+   * @private
+   */
+  private onOpenChanged() {
+    const open = this.open();
+
+    untracked(() => {
+      const selectedMenu = this.selectedMenu();
+      if (selectedMenu && !open) {
+        this.selectedMenu.set(undefined);
+        this.selectedEditingLink.set(undefined);
+      }
+    });
+  }
+
   constructor() {
     effect(this.onLinksChanged.bind(this));
+    effect(this.onOpenChanged.bind(this));
 
     this.readStorageLinks();
   }

@@ -1,13 +1,10 @@
 import {Component, effect, ElementRef, input, signal, untracked, viewChild} from '@angular/core';
-import {MatMiniFabButton} from '@angular/material/button';
 import {LinkT} from '../../common/types/LinkT';
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [
-    MatMiniFabButton
-  ],
+  imports: [],
   templateUrl: './button.component.html',
   styleUrl: './button.component.scss'
 })
@@ -19,7 +16,18 @@ export class ButtonComponent {
    * undefined если изображения у кнопки нет.
    */
   readonly link = input.required<LinkT>();
+
+  /**
+   * Выбрана ли текущая кнопка.
+   * По умолчанию не выбрана.
+   */
   readonly selected = input<boolean>(false);
+
+  /**
+   * Размер кнопки.
+   * По умолчанию `m`.
+   */
+  readonly size = input<"s" | "m">("m");
 
   /**
    * Сигнал хранит состояние наведена ли мышь на компонент кнопки.
@@ -44,6 +52,13 @@ export class ButtonComponent {
     const icon = this.link().iconSrc;
 
     return icon;
+  }
+
+  /**
+   * Геттер размера иконки для шаблона.
+   */
+  get _size() {
+    return this.size();
   }
 
   /**
@@ -89,11 +104,11 @@ export class ButtonComponent {
 
       if (hovered) {
         // Если мышь наведена, задать цвет фона
-        componentElement.style.background = "#B3E69A";
+        componentElement.style.background = "var(--p-primary-200)";
         return;
       }
       // Если мышь не наведена, задать цвет фона
-      componentElement.style.background = "#D1F0C2";
+      componentElement.style.background = "var(--p-primary-100)";
     });
   }
 
@@ -112,11 +127,14 @@ export class ButtonComponent {
       const componentElement = componentRef.nativeElement;
 
       if (selected) {
-        componentElement.style.background = "#74C43F";
+        // Если кнопка выбрана
+        componentElement.style.background = "var(--p-primary-500)";
       } else if (componentElement.matches(":hover")) {
-        componentElement.style.background = "#B3E69A";
+        // Если мышь наведена и кнопка не выбрана
+        componentElement.style.background = "var(--p-primary-200)";
       } else {
-        componentElement.style.background = "#D1F0C2";
+        // Если мышь не наведена и кнопка не выбрана
+        componentElement.style.background = "var(--p-primary-100)";
       }
     });
   }

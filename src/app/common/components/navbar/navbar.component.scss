@@ -13,5 +13,17 @@
     flex: 1;
     flex-direction: column;
     gap: 8px;
+
+    overflow: hidden;
+
+    &-button {
+      position: relative;
+    }
+
+    &-edit-button {
+      position: absolute;
+      top: 7px;
+      left: 46px;
+    }
   }
 }

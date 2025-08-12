@@ -1,1 +1,1 @@
-export type SettingsItemsT = "plus";
+export type SettingsItemsT = "edit";
