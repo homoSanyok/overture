@@ -1,8 +1,8 @@
 import {definePreset, palette} from '@primeng/themes';
 import Material from "@primeng/themes/material";
 
-export const GreenPreset = definePreset(Material, {
+export const FuchsiaPreset = definePreset(Material, {
   semantic: {
-    primary: palette("{green}")
+    primary: palette("{fuchsia}")
   }
 });

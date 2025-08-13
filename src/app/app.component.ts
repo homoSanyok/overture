@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NavbarComponent} from './common/components/navbar/navbar.component';
 import {SettingsService} from './services/settings.service';
 import {ContentComponent} from './common/components/content/content.component';
@@ -14,12 +14,4 @@ import {ContentComponent} from './common/components/content/content.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  readonly theme = {
-    "token": {
-      "colorPrimary": "#74c43f",
-      "colorInfo": "#74c43f",
-      "colorBgBase": "#ffffff"
-    }
-  };
-}
+export class AppComponent {}

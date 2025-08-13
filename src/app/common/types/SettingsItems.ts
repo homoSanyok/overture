@@ -1,1 +1,1 @@
-export type SettingsItemsT = "edit";
+export type SettingsItemsT = "edit" | "palette";

@@ -1,10 +1,13 @@
 <div class="container" #componentRef>
-  @switch (selectedMenu) {
-    @case ("edit") {
-      <app-settings-menu-edit></app-settings-menu-edit>
+    @switch (selectedMenu) {
+        @case ("edit") {
+            <app-settings-menu-edit></app-settings-menu-edit>
+        }
+        @case ("palette") {
+            <app-settings-menu-palette></app-settings-menu-palette>
+        }
+        @default {
+            <app-iframe></app-iframe>
+        }
     }
-    @default {
-      <app-iframe></app-iframe>
-    }
-  }
 </div>
