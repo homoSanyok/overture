@@ -5,6 +5,9 @@
   #componentRef
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
+  [pTooltip]="label"
+  tooltipPosition="right"
+  showDelay="500"
 >
   @if (icon) {
   <img

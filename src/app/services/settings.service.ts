@@ -50,6 +50,13 @@ export class SettingsService {
     readonly selectedPreset = signal<PresetT>({ name: "green", preset: GreenPreset, options: { darkModeSelector: false } });
 
     /**
+     * Сигнал хранит состояние, был ли произведён ресайз области.
+     * Если размер области был изменён в навигационной панели появится кнопка возврата
+     * размера в исходное состояние.
+     */
+    readonly isResized = signal<boolean>(false);
+
+    /**
      * Обработка изменения состояния сигнала {@link links}.
      * По изменении перезаписывает текущий список элементов ссылок
      * в локальное хранилище.

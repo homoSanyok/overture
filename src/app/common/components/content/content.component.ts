@@ -1,11 +1,14 @@
 /**
  * @module ContentComponent
  */
-import {Component, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
 import {SettingsService} from '../../../services/settings.service';
 import {IframeComponent} from '../iframe/iframe.component';
 import {SettingsMenuEditComponent} from "../settings-menu-edit/settings-menu-edit.component";
 import {SettingsMenuPaletteComponent} from "../settings-menu-palette/settings-menu-palette.component";
+
+// @ts-ignore
+import Resizable from "resizable"
 
 @Component({
     selector: 'app-content',
@@ -14,7 +17,7 @@ import {SettingsMenuPaletteComponent} from "../settings-menu-palette/settings-me
         SettingsMenuEditComponent,
         IframeComponent,
         SettingsMenuEditComponent,
-        SettingsMenuPaletteComponent
+        SettingsMenuPaletteComponent,
     ],
     templateUrl: './content.component.html',
     styleUrl: './content.component.scss'
@@ -22,7 +25,7 @@ import {SettingsMenuPaletteComponent} from "../settings-menu-palette/settings-me
 /**
  * Компонент-контейнер для всех видов контента приложения.
  */
-export class ContentComponent {
+export class ContentComponent implements AfterViewInit {
     private readonly settings = inject(SettingsService);
 
     /**
@@ -81,7 +84,114 @@ export class ContentComponent {
         });
     }
 
+    private readonly MOUSE_DOWN_SIZE = 400
+    private readonly MOUSE_UP_SIZE = 10
+
+    /**
+     * Функция обработки нажатия мыши на компонент области ресайза.
+     * Меняет размер области, чтобы плавно менять размер компонента.
+     * @param event
+     * @private
+     */
+    private onAreaMouseDown(event: Event) {
+        const element = event.target as HTMLDivElement;
+        element.style.minWidth = `${this.MOUSE_DOWN_SIZE}px`;
+        element.style.minHeight = `${this.MOUSE_DOWN_SIZE}px`;
+
+        if (element.classList.contains("resizable-handle-s")) {
+            element.style.inset = `auto 0px -${this.MOUSE_DOWN_SIZE / 2}px`;
+            return;
+        }
+        if (element.classList.contains("resizable-handle-se")) {
+            element.style.inset = `auto -${this.MOUSE_DOWN_SIZE / 2}px -${this.MOUSE_DOWN_SIZE / 2}px auto`;
+            return;
+        }
+        element.style.inset = `0px -${this.MOUSE_DOWN_SIZE / 2}px 0px auto`;
+        return;
+    }
+
+    /**
+     * Функция обработки ухода мыши с компонент области ресайза.
+     * Меняет размер области в исходное состояние.
+     * @param event
+     * @private
+     */
+    private onAreaMouseUp(event: Event) {
+        const element = event.target as HTMLDivElement;
+        element.style.minWidth = `${this.MOUSE_UP_SIZE}px`;
+        element.style.minHeight = `${this.MOUSE_UP_SIZE}px`;
+
+        if (element.classList.contains("resizable-handle-s")) {
+            element.style.inset = `auto 0px -${this.MOUSE_UP_SIZE / 2}px`;
+            return;
+        }
+        if (element.classList.contains("resizable-handle-se")) {
+            element.style.inset = `auto -${this.MOUSE_UP_SIZE / 2}px -${this.MOUSE_UP_SIZE / 2}px auto`;
+            return;
+        }
+        element.style.inset = `0px -${this.MOUSE_UP_SIZE / 2}px 0px auto`;
+        return;
+    }
+
+    /**
+     * Функция инициализирует слушатели действий мыши на
+     * элементах областей ресайза компонента.
+     * @private
+     */
+    private initResizableAreas() {
+        const areas = document.querySelectorAll(".resizable-handle");
+        areas.forEach(area => {
+            area.addEventListener("mousedown", this.onAreaMouseDown.bind(this));
+            area.addEventListener("mouseup", this.onAreaMouseUp.bind(this));
+        });
+    }
+
+    /**
+     * Функция инициализирует работу с Resizable.
+     * Генерирует объект `Resizable`, записывая его в {@link resizableInstance}.
+     * @private
+     */
+    private initResizable() {
+        const componentElement = this.componentRef()?.nativeElement;
+        if (!componentElement) return;
+
+        const resizable = new Resizable(componentElement, {
+            within: document.querySelector(".parent"),
+            handles: 's, se, e',
+            threshold: 10,
+            draggable: false
+        });
+
+        resizable.on("resizeend", () => {
+            const areas = document.querySelectorAll(".resizable-handle");
+            areas.forEach(area => {
+                const event = {target: area};
+                this.onAreaMouseUp(event as any as Event);
+            });
+        });
+
+        resizable.on("resizestart", () => {
+            this.settings.isResized.set(true);
+        });
+
+        this.initResizableAreas();
+    }
+
     constructor() {
         effect(this.onSettingsSelectedMenuChanged.bind(this));
+    }
+
+    ngAfterViewInit() {
+        this.initResizable();
+
+        window.addEventListener("resetsize", () => {
+            const componentElement = this.componentRef()?.nativeElement;
+            if (!componentElement) return;
+
+            componentElement.style.width = "100%";
+            componentElement.style.height = "100%";
+
+            this.settings.isResized.set(false);
+        });
     }
 }

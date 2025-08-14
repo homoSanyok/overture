@@ -1,10 +1,7 @@
 <div class="container">
     <div class="container__content">
         @for (link of links; track link.id) {
-            <div class="container__content-button"
-                 [pTooltip]="link.label"
-                 tooltipPosition="right"
-                 showDelay="500">
+            <div class="container__content-button">
                 <app-button [link]="link"
                             [selected]="selectedLink?.id === link.id && !selectedEditingLink"
                             (click)="onClickLink(link)"
@@ -29,5 +26,19 @@
             </div>
         }
     </div>
+    @if (isResized) {
+        @let resizeButton =
+            {
+                id: "resizeButton",
+                iconSrc: "/reset.svg",
+                label: "Сбросить размер",
+                path: "",
+            };
+        <app-button class="resize-button"
+                    [link]="resizeButton"
+                    size="s"
+                    (click)="onClickResizeButton()"
+        ></app-button>
+    }
     <app-settings-button></app-settings-button>
 </div>
