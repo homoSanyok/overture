@@ -51,7 +51,7 @@ export class NavbarComponent {
      * Возвращает значение сигнала: был ли произведён ресайз области, - для шаблона.
      */
     get isResized() {
-        return this.settings.isResized();
+        return Boolean(this.settings.resize());
     }
 
     /**

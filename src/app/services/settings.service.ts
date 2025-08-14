@@ -50,11 +50,13 @@ export class SettingsService {
     readonly selectedPreset = signal<PresetT>({ name: "green", preset: GreenPreset, options: { darkModeSelector: false } });
 
     /**
-     * Сигнал хранит состояние, был ли произведён ресайз области.
-     * Если размер области был изменён в навигационной панели появится кнопка возврата
-     * размера в исходное состояние.
+     * Сигнал хранит состояние текущих размеров меню.
+     * Если размер области стандартный, то значением сигнала будет `undefined`.
+     *
+     * Если размер области был изменён, то в сигнал запишутся значения размеров области
+     * и в навигационной панели появится кнопка возврата размера в исходное состояние.
      */
-    readonly isResized = signal<boolean>(false);
+    readonly resize = signal<{ w: string, h: string } | undefined>(undefined);
 
     /**
      * Обработка изменения состояния сигнала {@link links}.

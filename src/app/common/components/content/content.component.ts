@@ -51,13 +51,20 @@ export class ContentComponent implements AfterViewInit {
         const selectedMenu = this.settings.selectedMenu();
 
         untracked(() => {
-            const componentRef = this.componentRef();
-            if (!componentRef) return;
+            const componentElement = this.componentRef()?.nativeElement;
+            if (!componentElement) return;
 
-            const componentElement = componentRef.nativeElement;
+            const parentElement = componentElement.parentElement;
+            if (!parentElement) return;
+
+            const resize = this.settings.resize();
 
             switch (selectedMenu) {
                 case "edit": {
+                    parentElement.style.alignItems = "center";
+                    parentElement.style.justifyContent = "center";
+                    parentElement.style.transition = "width 300ms, height 300ms";
+
                     componentElement.style.width = "60%";
                     componentElement.style.height = "40%";
 
@@ -66,6 +73,10 @@ export class ContentComponent implements AfterViewInit {
                     break;
                 }
                 case "palette": {
+                    parentElement.style.transition = "width 300ms, height 300ms";
+                    parentElement.style.alignItems = "center";
+                    parentElement.style.justifyContent = "center";
+
                     componentElement.style.width = "20%";
                     componentElement.style.height = "10%";
 
@@ -74,11 +85,17 @@ export class ContentComponent implements AfterViewInit {
                     break;
                 }
                 default: {
-                    componentElement.style.width = "100%";
-                    componentElement.style.height = "100%";
+                    componentElement.style.width = resize ? resize.w : "100%";
+                    componentElement.style.height = resize ? resize.h : "100%";
 
                     componentElement.style.maxWidth = "unset";
                     componentElement.style.minHeight = "unset";
+
+                    setTimeout(() => {
+                        parentElement.style.transition = "unset";
+                        parentElement.style.alignItems = "unset";
+                        parentElement.style.justifyContent = "unset";
+                    }, 300);
                 }
             }
         });
@@ -97,6 +114,11 @@ export class ContentComponent implements AfterViewInit {
         const element = event.target as HTMLDivElement;
         element.style.minWidth = `${this.MOUSE_DOWN_SIZE}px`;
         element.style.minHeight = `${this.MOUSE_DOWN_SIZE}px`;
+
+        const parentElement = element.parentElement;
+        if (!parentElement) return;
+
+        parentElement.style.transition = "unset";
 
         if (element.classList.contains("resizable-handle-s")) {
             element.style.inset = `auto 0px -${this.MOUSE_DOWN_SIZE / 2}px`;
@@ -120,6 +142,11 @@ export class ContentComponent implements AfterViewInit {
         const element = event.target as HTMLDivElement;
         element.style.minWidth = `${this.MOUSE_UP_SIZE}px`;
         element.style.minHeight = `${this.MOUSE_UP_SIZE}px`;
+
+        const parentElement = element.parentElement;
+        if (!parentElement) return;
+
+        parentElement.style.transition = "width 300ms, height 300ms";
 
         if (element.classList.contains("resizable-handle-s")) {
             element.style.inset = `auto 0px -${this.MOUSE_UP_SIZE / 2}px`;
@@ -168,10 +195,19 @@ export class ContentComponent implements AfterViewInit {
                 const event = {target: area};
                 this.onAreaMouseUp(event as any as Event);
             });
+
+            const componentElement = this.componentRef()?.nativeElement;
+            if (!componentElement) return;
+
+            if ((window.innerWidth - 62) === componentElement.clientWidth && (window.innerHeight - 16) === componentElement.clientHeight) {
+                this.settings.resize.set(undefined)
+                return;
+            }
+            this.settings.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
         });
 
         resizable.on("resizestart", () => {
-            this.settings.isResized.set(true);
+            this.settings.resize.set({ w: "100%", h: "100%" });
         });
 
         this.initResizableAreas();
@@ -191,7 +227,7 @@ export class ContentComponent implements AfterViewInit {
             componentElement.style.width = "100%";
             componentElement.style.height = "100%";
 
-            this.settings.isResized.set(false);
+            this.settings.resize.set(undefined);
         });
     }
 }
