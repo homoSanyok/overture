@@ -1,4 +1,7 @@
-import {Component, inject} from '@angular/core';
+/**
+ * @module SettingsMenuPaletteComponent
+ */
+import {Component, computed, inject} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {Presets} from "../../constants/Presets";
 import {PresetT} from "../../types/PresetT";
@@ -11,27 +14,43 @@ import {PresetT} from "../../types/PresetT";
   styleUrl: './settings-menu-palette.component.scss'
 })
 /**
- * Компонент меню настроек изменения темы всего приложения.
+ * Компонент меню настроек изменения цветовой темы приложения.
+ * Отображает палитру из предустановленных цветов.
+ *
+ * Выбранный пользователем цвет меняет цветовую тему приложения и
+ * сохраняет это состояние в локальной памяти.
  */
 export class SettingsMenuPaletteComponent {
+    /**
+     * {@link SettingsService}.
+     * @private
+     */
     private settings = inject(SettingsService);
+
     readonly Presets = Presets;
 
     /**
-     * Получение имени выбранного пресета для шаблона.
+     * Возвращает параметр `name` текущей выбранной цветовой схемы.
+     * Используется в шаблоне для выделения выбранного цвета бордером.
      */
-    get selectedPresetName() {
+    readonly selectedPresetName = computed(() => {
         return this.settings.selectedPreset().name;
-    }
+    });
 
     /**
-     * Функция обработки клика по пресету.
-     * Задаёт сигналу `selectedPreset` сервиса {@link SettingsService} значение
+     * Функция обработки клика по иконке цвета.
+     *
+     * Задаёт сигналу {@link selectedPreset} значение
      * выбранного пользователем пресета.
+     *
+     * @param preset - выбранная пользователем цветовая схема.
      */
     onClickPreset(preset: PresetT) {
-        const selectedPreset = this.settings.selectedPreset();
-        if (selectedPreset.name === preset.name) return;
+        if (this.settings.selectedPreset().name === preset.name) {
+            // Если пользователь выбрал уже выбранный цвет,
+            // ничего не делает.
+            return;
+        }
 
         this.settings.selectedPreset.set(preset);
     }

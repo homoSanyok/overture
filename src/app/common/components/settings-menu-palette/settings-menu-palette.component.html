@@ -3,7 +3,7 @@
         <div class="container__section-title">Основной цвет</div>
         <div class="container__section-content">
             @for (preset of Presets; track preset.name) {
-                <div [class]="'preset ' + (selectedPresetName === preset.name && 'selected')"
+                <div [class]="'preset ' + (selectedPresetName() === preset.name && 'selected')"
                      [style.background]="'var(--p-' + preset.name + '-600)'"
                      [style.outline-color]="'var(--p-' + preset.name + '-600)'"
                      (click)="onClickPreset(preset)"></div>

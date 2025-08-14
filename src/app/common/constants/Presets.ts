@@ -16,6 +16,10 @@ import {FuchsiaPreset} from "../../shared/presets/FuchsiaPreset";
 import {PinkPreset} from "../../shared/presets/PinkPreset";
 import {RosePreset} from "../../shared/presets/RosePreset";
 
+/**
+ * Список всех доступных цветовых тем приложения.
+ * Используется в компоненте {@link SettingsMenuPaletteComponent}.
+ */
 export const Presets: PresetT[] = [
     {
         name: "emerald",
