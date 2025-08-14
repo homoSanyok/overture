@@ -1,6 +1,7 @@
 import { Component, computed, ElementRef, inject, viewChild } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-iframe',
@@ -17,7 +18,14 @@ export class IframeComponent {
    * Мемоизированная ссылка текщего выбранного элемента link для шаблона.
    */
   readonly src = computed(() => {
-    const url = this.settings.selectedLink()?.path || '';
+    let url = this.settings.selectedLink()?.path || '';
+    if (url.indexOf("localhost") !== -1) {
+        // Если обращение идёт на localhost,
+        // значит пользователь захотел рекурсии
+        if (url.at(-1) !== '/') url = `${url}/`;
+        url = `${url}?level=${uuid()}`;
+    }
+
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   });
 }
