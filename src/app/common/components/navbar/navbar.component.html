@@ -1,34 +1,33 @@
 <div class="container">
-  <div class="container__content">
-    @for (link of links; track link.id) {
-      <div class="container__content-button">
-        <app-button
-          [link]="link"
-          [selected]="
-            selectedLink?.id === link.id &&
-            !selectedEditingLink
-          "
-          (click)="onClickLink(link)"
-        ></app-button>
+    <div class="container__content">
+        @for (link of links; track link.id) {
+            <div class="container__content-button"
+                 [pTooltip]="link.label"
+                 tooltipPosition="right"
+                 showDelay="500">
+                <app-button [link]="link"
+                            [selected]="selectedLink?.id === link.id && !selectedEditingLink"
+                            (click)="onClickLink(link)"
+                ></app-button>
 
-        @let editButton =
-          {
-            id: link.id,
-            iconSrc: "/edit.svg",
-            label: "",
-            path: "",
-          };
+                @let editButton =
+                    {
+                        id: link.id,
+                        iconSrc: "/edit.svg",
+                        label: "",
+                        path: "",
+                    };
 
-        <div class="container__content-edit-button">
-          <app-button
-            [link]="editButton"
-            [selected]="selectedEditingLink?.id === link.id"
-            size="s"
-            (click)="onClickEditingLink(link)"
-          ></app-button>
-        </div>
-      </div>
-    }
-  </div>
-  <app-settings-button></app-settings-button>
+                <div class="container__content-edit-button">
+                    <app-button
+                            [link]="editButton"
+                            [selected]="selectedEditingLink?.id === link.id"
+                            size="s"
+                            (click)="onClickEditingLink(link)"
+                    ></app-button>
+                </div>
+            </div>
+        }
+    </div>
+    <app-settings-button></app-settings-button>
 </div>

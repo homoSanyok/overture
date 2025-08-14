@@ -7,14 +7,16 @@ import {SettingsButtonComponent} from '../settings-button/settings-button.compon
 import {SettingsService} from '../../../services/settings.service';
 import {ButtonComponent} from '../../../shared/button/button.component';
 import {LinkT} from '../../types/LinkT';
+import {Tooltip} from "primeng/tooltip";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    SettingsButtonComponent,
-    ButtonComponent
-  ],
+    imports: [
+        SettingsButtonComponent,
+        ButtonComponent,
+        Tooltip
+    ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
