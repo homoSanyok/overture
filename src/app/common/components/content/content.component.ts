@@ -63,10 +63,10 @@ export class ContentComponent {
                     break;
                 }
                 case "palette": {
-                    componentElement.style.width = "40%";
-                    componentElement.style.height = "20%";
+                    componentElement.style.width = "20%";
+                    componentElement.style.height = "10%";
 
-                    componentElement.style.maxWidth = "900px";
+                    componentElement.style.minWidth = "330px";
                     componentElement.style.minHeight = "300px";
                     break;
                 }

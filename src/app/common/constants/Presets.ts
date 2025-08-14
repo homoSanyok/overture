@@ -20,81 +20,81 @@ export const Presets: PresetT[] = [
     {
         name: "emerald",
         preset: EmeraldPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "green",
         preset: GreenPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "lime",
         preset: LimePreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "orange",
         preset: OrangePreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "amber",
         preset: AmberPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "yellow",
         preset: YellowPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "teal",
         preset: TealPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "cyan",
         preset: CyanPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "sky",
         preset: SkyPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "blue",
         preset: BluePreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "indigo",
         preset: IndigoPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "violet",
         preset: VioletPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "purple",
         preset: PurplePreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "fuchsia",
         preset: FuchsiaPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "pink",
         preset: PinkPreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     },
     {
         name: "rose",
         preset: RosePreset,
-        options: { darkModeSelector: false }
+        options: { darkModeSelector: ".dark" }
     }
 ]

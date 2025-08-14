@@ -19,6 +19,6 @@ export type PresetT = {
     name: PresetNameT,
     preset: any,
     options: {
-        darkModeSelector: boolean
+        darkModeSelector: boolean | string
     }
 }
