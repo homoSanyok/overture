@@ -69,39 +69,37 @@ export class ContentComponent implements AfterViewInit {
                 case "edit": {
                     // Если было выбрано меню редактирования элемента link.
 
-                    // Родительскому контейнеру компонента задаёт центрирование
-                    // дочерних элементов.
-                    // Задаёт плавность анимации при изменении размеров компонента.
-                    parentElement.style.alignItems = "center";
-                    parentElement.style.justifyContent = "center";
-                    componentElement.style.transition = "width 300ms, height 300ms";
+                    componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
-                    // Задаёт компоненту относительную ширину и высоту.
-                    componentElement.style.width = "60%";
-                    componentElement.style.height = "40%";
+                    let width = parentElement.clientWidth * .6;
+                    let height = parentElement.clientHeight * .4;
 
-                    // Задаёт компоненту максимальную ширину и минимальную высоту.
-                    componentElement.style.maxWidth = "900px";
-                    componentElement.style.minHeight = "400px";
+                    if (width > 900) width = 900;
+                    if (height < 400) height = 400;
+
+                    componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
+                    componentElement.style.marginTop = `calc((${parentElement.clientHeight}px - ${height}px) / 2)`;
+
+                    componentElement.style.width = `${width}px`;
+                    componentElement.style.height = `${height}px`;
                     break;
                 }
                 case "palette": {
                     // Если выбрано меню выбора цветовой схемы приложения.
 
-                    // Родительскому контейнеру компонента задаёт центрирование
-                    // дочерних элементов.
-                    // Задаёт плавность анимации при изменении размеров компонента.
-                    parentElement.style.alignItems = "center";
-                    parentElement.style.justifyContent = "center";
-                    componentElement.style.transition = "width 300ms, height 300ms";
+                    componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
-                    // Задаёт компоненту относительную ширину и высоту.
-                    componentElement.style.width = "20%";
-                    componentElement.style.height = "10%";
+                    let width = parentElement.clientWidth * .2;
+                    let height = parentElement.clientHeight * .1;
 
-                    // Задаёт компоненту минимальные ширину и высоту.
-                    componentElement.style.minWidth = "330px";
-                    componentElement.style.minHeight = "300px";
+                    if (width < 330) width = 330;
+                    if (height < 300) height = 300;
+
+                    componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
+                    componentElement.style.marginTop = `calc((${parentElement.clientHeight}px - ${height}px) / 2)`;
+
+                    componentElement.style.width = `${width}px`;
+                    componentElement.style.height = `${height}px`;
                     break;
                 }
                 default: {
@@ -111,13 +109,10 @@ export class ContentComponent implements AfterViewInit {
                     componentElement.style.width = resize ? resize.w : "100%";
                     componentElement.style.height = resize ? resize.h : "100%";
 
-                    // Сбрасывает настройки
-                    componentElement.style.maxWidth = "unset";
-                    componentElement.style.minHeight = "unset";
+                    componentElement.style.marginLeft = "0px";
+                    componentElement.style.marginTop = "0px";
 
                     setTimeout(() => {
-                        parentElement.style.alignItems = "unset";
-                        parentElement.style.justifyContent = "unset";
                         componentElement.style.transition = "unset";
                     }, 300);
                 }
