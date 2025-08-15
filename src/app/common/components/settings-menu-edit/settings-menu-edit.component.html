@@ -44,19 +44,19 @@
   </div>
 
   <div class="container__buttons">
-    @if (isEditing) {
+    @if (isEditing()) {
       <p-button class="container__buttons-delete"
                 label="Удалить"
                 severity="danger"
                 variant="outlined"
                 size="small"
-                (click)="onRemove()"/>
+                (click)="onClickRemove()"/>
     }
 
     <p-button class="container__buttons-save"
               label="Сохранить"
               variant="outlined"
               size="small"
-              (click)="onSave()"/>
+              (click)="onClickSave()"/>
   </div>
 </div>
