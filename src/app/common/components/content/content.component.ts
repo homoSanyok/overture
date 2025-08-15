@@ -1,7 +1,7 @@
 /**
  * @module ContentComponent
  */
-import {AfterViewInit, Component, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
+import {AfterViewInit, Component, computed, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
 import {SettingsService} from '../../../services/settings.service';
 import {IframeComponent} from '../iframe/iframe.component';
 import {SettingsMenuEditComponent} from "../settings-menu-edit/settings-menu-edit.component";
@@ -26,22 +26,26 @@ import Resizable from "resizable"
  * Компонент-контейнер для всех видов контента приложения.
  */
 export class ContentComponent implements AfterViewInit {
+    /**
+     * {@link SettingsService}
+     * @private
+     */
     private readonly settings = inject(SettingsService);
 
     /**
-     * Ссылка на компонент.
-     * Используется для смены стилей компонента при изменении
-     * его состояния.
+     * Ссылка на главный контейнер компонента.
+     * Компонент по данной ссылке подвергается изменениям размера
+     * при смене меню и ресайзе.
      * @private
      */
     private readonly componentRef = viewChild<ElementRef<HTMLDivElement>>('componentRef');
 
     /**
-     * Геттер выбранного меню для шаблона.
+     * Возвращает текущее выбранное меню настроек {@link SettingsService.selectedMenu} для шаблона.
      */
-    get selectedMenu() {
+    readonly selectedMenu = computed(() => {
         return this.settings.selectedMenu();
-    }
+    });
 
     /**
      * Функция обработки выбранного в настройках меню.
@@ -54,6 +58,8 @@ export class ContentComponent implements AfterViewInit {
             const componentElement = this.componentRef()?.nativeElement;
             if (!componentElement) return;
 
+            // Получает родительский элемент элемента данного компонента
+            // для включения/отключения анимаций.
             const parentElement = componentElement.parentElement;
             if (!parentElement) return;
 
@@ -61,40 +67,58 @@ export class ContentComponent implements AfterViewInit {
 
             switch (selectedMenu) {
                 case "edit": {
+                    // Если было выбрано меню редактирования элемента link.
+
+                    // Родительскому контейнеру компонента задаёт центрирование
+                    // дочерних элементов.
+                    // Задаёт плавность анимации при изменении размеров компонента.
                     parentElement.style.alignItems = "center";
                     parentElement.style.justifyContent = "center";
-                    parentElement.style.transition = "width 300ms, height 300ms";
+                    componentElement.style.transition = "width 300ms, height 300ms";
 
+                    // Задаёт компоненту относительную ширину и высоту.
                     componentElement.style.width = "60%";
                     componentElement.style.height = "40%";
 
+                    // Задаёт компоненту максимальную ширину и минимальную высоту.
                     componentElement.style.maxWidth = "900px";
                     componentElement.style.minHeight = "400px";
                     break;
                 }
                 case "palette": {
-                    parentElement.style.transition = "width 300ms, height 300ms";
+                    // Если выбрано меню выбора цветовой схемы приложения.
+
+                    // Родительскому контейнеру компонента задаёт центрирование
+                    // дочерних элементов.
+                    // Задаёт плавность анимации при изменении размеров компонента.
                     parentElement.style.alignItems = "center";
                     parentElement.style.justifyContent = "center";
+                    componentElement.style.transition = "width 300ms, height 300ms";
 
+                    // Задаёт компоненту относительную ширину и высоту.
                     componentElement.style.width = "20%";
                     componentElement.style.height = "10%";
 
+                    // Задаёт компоненту минимальные ширину и высоту.
                     componentElement.style.minWidth = "330px";
                     componentElement.style.minHeight = "300px";
                     break;
                 }
                 default: {
+                    // Если выбран переход к основному меню приложения.
+
+                    // Задаёт размеры меню в соответствии с последним ресайзом.
                     componentElement.style.width = resize ? resize.w : "100%";
                     componentElement.style.height = resize ? resize.h : "100%";
 
+                    // Сбрасывает настройки
                     componentElement.style.maxWidth = "unset";
                     componentElement.style.minHeight = "unset";
 
                     setTimeout(() => {
-                        parentElement.style.transition = "unset";
                         parentElement.style.alignItems = "unset";
                         parentElement.style.justifyContent = "unset";
+                        componentElement.style.transition = "unset";
                     }, 300);
                 }
             }

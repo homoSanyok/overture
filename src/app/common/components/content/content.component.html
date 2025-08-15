@@ -1,7 +1,7 @@
 <div class="parent"></div>
 <div class="container" #componentRef>
 
-    @switch (selectedMenu) {
+    @switch (selectedMenu()) {
         @case ("edit") {
             <app-settings-menu-edit></app-settings-menu-edit>
         }
