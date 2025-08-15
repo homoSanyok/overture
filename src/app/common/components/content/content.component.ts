@@ -48,8 +48,11 @@ export class ContentComponent implements AfterViewInit {
     });
 
     /**
-     * Функция обработки выбранного в настройках меню.
-     * Меняет разер контейнера контента при смене выбранного меню.
+     * Функция обработки изменения сигнала {@link SettingsService.selectedMenu}.
+     *
+     * По изменении выбранного меню, меняет его размер в соответствии с выбором.
+     * Если никакое меню не выбрано, значит пользователь перешёл на основное меню приложения,
+     * все стили меню сбрасываются.
      */
     onSettingsSelectedMenuChanged() {
         const selectedMenu = this.settings.selectedMenu();
@@ -69,17 +72,22 @@ export class ContentComponent implements AfterViewInit {
                 case "edit": {
                     // Если было выбрано меню редактирования элемента link.
 
+                    // Задаёт анимации при изменении размеров и положения относительно родительского компонента.
                     componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
+                    // Относительные высота и ширина открываемого меню.
                     let width = parentElement.clientWidth * .6;
                     let height = parentElement.clientHeight * .4;
 
+                    // Задаёт максимальную ширину и минимальную высоту.
                     if (width > 900) width = 900;
                     if (height < 400) height = 400;
 
+                    // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
                     componentElement.style.marginTop = `calc((${parentElement.clientHeight}px - ${height}px) / 2)`;
 
+                    // Задаёт ширину и высоту меню.
                     componentElement.style.width = `${width}px`;
                     componentElement.style.height = `${height}px`;
                     break;
@@ -87,17 +95,22 @@ export class ContentComponent implements AfterViewInit {
                 case "palette": {
                     // Если выбрано меню выбора цветовой схемы приложения.
 
+                    // Задаёт анимации при изменении размеров и положения относительно родительского компонента.
                     componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
+                    // Относительные высота и ширина открываемого меню.
                     let width = parentElement.clientWidth * .2;
                     let height = parentElement.clientHeight * .1;
 
+                    // Задаёт минимальные ширину и высоту.
                     if (width < 330) width = 330;
                     if (height < 300) height = 300;
 
+                    // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
                     componentElement.style.marginTop = `calc((${parentElement.clientHeight}px - ${height}px) / 2)`;
 
+                    // Задаёт ширину и высоту меню.
                     componentElement.style.width = `${width}px`;
                     componentElement.style.height = `${height}px`;
                     break;
@@ -109,10 +122,15 @@ export class ContentComponent implements AfterViewInit {
                     componentElement.style.width = resize ? resize.w : "100%";
                     componentElement.style.height = resize ? resize.h : "100%";
 
+                    // Сбрасывает отступы относительно родительского контейнера отключения центровки.
                     componentElement.style.marginLeft = "0px";
                     componentElement.style.marginTop = "0px";
 
                     setTimeout(() => {
+                        // Сбрасывает анимации.
+                        // Сброс происходит с задержкой для того, чтобы успела произойти
+                        // анимация перехода от предыдущего меню к текущему.
+                        // Сброс анимации требуется для корректной работы ресайза основного меню.
                         componentElement.style.transition = "unset";
                     }, 300);
                 }
