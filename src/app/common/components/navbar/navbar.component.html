@@ -1,9 +1,9 @@
 <div class="container">
     <div class="container__content">
-        @for (link of links; track link.id) {
+        @for (link of links(); track link.id) {
             <div class="container__content-button">
                 <app-button [link]="link"
-                            [selected]="selectedLink?.id === link.id && !selectedEditingLink"
+                            [selected]="selectedLink()?.id === link.id && !selectedEditingLink()"
                             (click)="onClickLink(link)"
                 ></app-button>
 
@@ -18,7 +18,7 @@
                 <div class="container__content-edit-button">
                     <app-button
                             [link]="editButton"
-                            [selected]="selectedEditingLink?.id === link.id"
+                            [selected]="selectedEditingLink()?.id === link.id"
                             size="s"
                             (click)="onClickEditingLink(link)"
                     ></app-button>
@@ -26,7 +26,7 @@
             </div>
         }
     </div>
-    @if (isResized) {
+    @if (isResized()) {
         @let resizeButton =
             {
                 id: "resizeButton",
