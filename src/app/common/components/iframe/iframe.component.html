@@ -1,6 +1,23 @@
-<iframe
-  [src]="src()"
-  width="100%"
-  height="100%"
-  class="container"
-></iframe>
+<div class="container">
+    @if (src()) {
+        <iframe [src]="src()"
+                width="100%"
+                height="100%"
+                class="container__iframe"
+                (load)="onLoaded($event)">
+        </iframe>
+    } @else {
+        <img class="container__resize-icon"
+             src="/resize.svg" width="16" height="16">
+    }
+
+    @if (loading()) {
+        <p-progress-spinner class="container__loader"
+                            strokeWidth="5"
+                            fill="transparent"
+                            animationDuration=".5s"
+                            [style]="{ width: '36px', height: '36px' }"
+        ></p-progress-spinner>
+    }
+    <div [class]="'container__loader-opacity ' + (loading())"></div>
+</div>
