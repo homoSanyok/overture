@@ -32,6 +32,8 @@ export class ContentComponent implements AfterViewInit {
      */
     private readonly settings = inject(SettingsService);
 
+    private resizable: any;
+
     /**
      * Ссылка на главный контейнер компонента.
      * Компонент по данной ссылке подвергается изменениям размера
@@ -67,6 +69,12 @@ export class ContentComponent implements AfterViewInit {
             if (!parentElement) return;
 
             const resize = this.settings.resize();
+
+            try {
+                // Если выбрано какое-либо меню, кроме основного,
+                // отключает возможность ресайза.
+                this.resizable.destroy();
+            } catch {}
 
             switch (selectedMenu) {
                 case "edit": {
@@ -133,6 +141,9 @@ export class ContentComponent implements AfterViewInit {
                         // Сброс анимации требуется для корректной работы ресайза основного меню.
                         componentElement.style.transition = "unset";
                     }, 300);
+
+                    // Включает возможность ресайза.
+                    this.initResizable();
                 }
             }
         });
@@ -249,14 +260,14 @@ export class ContentComponent implements AfterViewInit {
         const componentElement = this.componentRef()?.nativeElement;
         if (!componentElement) return;
 
-        const resizable = new Resizable(componentElement, {
+        this.resizable = new Resizable(componentElement, {
             within: document.querySelector(".parent"),
             handles: 's, se, e',
             threshold: 10,
             draggable: false
         });
 
-        resizable.on("resizeend", () => {
+        this.resizable.on("resizeend", () => {
             const areas = document.querySelectorAll(".resizable-handle");
             areas.forEach(area => {
                 // Сбрасывает каждую область перетаскивания
@@ -281,7 +292,7 @@ export class ContentComponent implements AfterViewInit {
             this.settings.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
         });
 
-        resizable.on("resizestart", () => {
+        this.resizable.on("resizestart", () => {
             const componentElement = this.componentRef()?.nativeElement;
             if (!componentElement) return;
 
@@ -293,10 +304,6 @@ export class ContentComponent implements AfterViewInit {
         this.initResizableAreas();
     }
 
-    constructor() {
-        effect(this.onSettingsSelectedMenuChanged.bind(this));
-    }
-
     ngAfterViewInit() {
         this.initResizable();
 
@@ -305,12 +312,24 @@ export class ContentComponent implements AfterViewInit {
             const componentElement = this.componentRef()?.nativeElement;
             if (!componentElement) return;
 
+            // Включает анимации для плавного возврата размеров в исходное состояние.
+            componentElement.style.transition = "width 300ms, height 300ms";
+
             // Задаёт меню максимальные значения.
             componentElement.style.width = "100%";
             componentElement.style.height = "100%";
 
+            setTimeout(() => {
+                // Выключает анимации после их завершения.
+                componentElement.style.transition = "width 300ms, height 300ms";
+            }, 300);
+
             // Сбрасывает состояние ресайза.
             this.settings.resize.set(undefined);
         });
+    }
+
+    constructor() {
+        effect(this.onSettingsSelectedMenuChanged.bind(this));
     }
 }

@@ -13,6 +13,13 @@
   &__icon {
     margin-top: auto;
     margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    &-input {
+      flex: 1;
+    }
   }
 
   &__path {

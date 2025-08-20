@@ -6,10 +6,11 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {v4 as uuid} from 'uuid';
 import {SettingsService} from '../../../services/settings.service';
 import {LinkT} from '../../types/LinkT';
-import {Button} from 'primeng/button';
+import {Button, ButtonIcon} from 'primeng/button';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Message} from 'primeng/message';
+import {FileUpload} from "primeng/fileupload";
 
 @Component({
     selector: 'app-settings-menu-edit',
@@ -19,7 +20,9 @@ import {Message} from 'primeng/message';
         Button,
         FloatLabel,
         InputText,
-        Message
+        Message,
+        FileUpload,
+        ButtonIcon
     ],
     templateUrl: './settings-menu-edit.component.html',
     styleUrl: './settings-menu-edit.component.scss'

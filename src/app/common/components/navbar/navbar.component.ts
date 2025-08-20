@@ -60,7 +60,13 @@ export class NavbarComponent {
      * В противном случае `false`.
      */
     readonly isResized = computed(() => {
-        return Boolean(this.settings.resize());
+        const selectedMenu = this.settings.selectedMenu();
+        if (!selectedMenu) {
+            // Если выбрано основное меню
+            return Boolean(this.settings.resize());
+        }
+
+        return false;
     });
 
     /**
