@@ -4,12 +4,14 @@
 import {Component, effect, ElementRef, inject, signal, untracked, viewChild} from '@angular/core';
 import {SettingsService} from '../../../services/settings.service';
 import {SettingsPanelComponent} from '../settings-panel/settings-panel.component';
+import {APP_BASE_HREF, NgOptimizedImage} from "@angular/common";
 
 @Component({
     selector: 'app-settings-button',
     standalone: true,
     imports: [
-        SettingsPanelComponent
+        SettingsPanelComponent,
+        NgOptimizedImage
     ],
     templateUrl: './settings-button.component.html',
     styleUrl: './settings-button.component.scss'

@@ -10,13 +10,13 @@ import {SettingsItemsT} from "../types/SettingsItems";
 export const SettingsLinks: LinkT[] = [
     {
         id: "edit" as SettingsItemsT,
-        iconSrc: "/plus.svg",
+        iconSrc: "plus.svg",
         label: "",
         path: ""
     },
     {
         id: "palette" as SettingsItemsT,
-        iconSrc: "/palette.svg",
+        iconSrc: "palette.svg",
         label: "",
         path: ""
     }
