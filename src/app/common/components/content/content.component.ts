@@ -138,8 +138,17 @@ export class ContentComponent implements AfterViewInit {
         });
     }
 
-    private readonly MOUSE_DOWN_SIZE = 400
-    private readonly MOUSE_UP_SIZE = 10
+    /**
+     * Константные значения ширины области, за которую пользователь
+     * тянет мышью, для изменения размера основного окна.
+     *
+     * Заданы константные значения областей при двух состояниях:
+     * пользователь выбрал мышью область ресайза, пользователь убрал мышь
+     * с области ресайза.
+     * @private
+     */
+    private readonly MOUSE_DOWN_SIZE = 400;
+    private readonly MOUSE_UP_SIZE = 10;
 
     /**
      * Функция обработки нажатия мыши на компонент области ресайза.
@@ -149,22 +158,33 @@ export class ContentComponent implements AfterViewInit {
      */
     private onAreaMouseDown(event: Event) {
         const element = event.target as HTMLDivElement;
+
+        // Расширение области ресайза.
         element.style.minWidth = `${this.MOUSE_DOWN_SIZE}px`;
         element.style.minHeight = `${this.MOUSE_DOWN_SIZE}px`;
 
         const parentElement = element.parentElement;
         if (!parentElement) return;
 
+        // Выключение анимаций при изменении размеров.
+        // Чтобы при ресайзе не было дёрганий.
         parentElement.style.transition = "unset";
 
         if (element.classList.contains("resizable-handle-s")) {
+            // Если пользователем выбрана нижняя область,
+            // задаёт ей новое положение (центрирует относительно новых размеров).
             element.style.inset = `auto 0px -${this.MOUSE_DOWN_SIZE / 2}px`;
             return;
         }
         if (element.classList.contains("resizable-handle-se")) {
+            // Если пользователем выбрана правая нижняя область,
+            // задаёт ей новое положение (центрирует относительно новых размеров).
             element.style.inset = `auto -${this.MOUSE_DOWN_SIZE / 2}px -${this.MOUSE_DOWN_SIZE / 2}px auto`;
             return;
         }
+
+        // Если пользователем выбрана правая область,
+        // задаёт ей новое положение (центрирует относительно новых размеров).
         element.style.inset = `0px -${this.MOUSE_DOWN_SIZE / 2}px 0px auto`;
         return;
     }
@@ -177,22 +197,32 @@ export class ContentComponent implements AfterViewInit {
      */
     private onAreaMouseUp(event: Event) {
         const element = event.target as HTMLDivElement;
+
+        // Возврат ширины и высоты области ресайза в исходное состояние.
         element.style.minWidth = `${this.MOUSE_UP_SIZE}px`;
         element.style.minHeight = `${this.MOUSE_UP_SIZE}px`;
 
         const parentElement = element.parentElement;
         if (!parentElement) return;
 
+        // Включение анимаций при изменении размеров.
         parentElement.style.transition = "width 300ms, height 300ms";
 
         if (element.classList.contains("resizable-handle-s")) {
+            // Если пользователем была выбрана нижняя область,
+            // задаёт ей новое положение (центрирует относительно новых размеров).
             element.style.inset = `auto 0px -${this.MOUSE_UP_SIZE / 2}px`;
             return;
         }
         if (element.classList.contains("resizable-handle-se")) {
+            // Если пользователем была выбрана правая нижняя область,
+            // задаёт ей новое положение (центрирует относительно новых размеров).
             element.style.inset = `auto -${this.MOUSE_UP_SIZE / 2}px -${this.MOUSE_UP_SIZE / 2}px auto`;
             return;
         }
+
+        // Если пользователем была выбрана правая область,
+        // задаёт ей новое положение (центрирует относительно новых размеров).
         element.style.inset = `0px -${this.MOUSE_UP_SIZE / 2}px 0px auto`;
         return;
     }
@@ -229,6 +259,9 @@ export class ContentComponent implements AfterViewInit {
         resizable.on("resizeend", () => {
             const areas = document.querySelectorAll(".resizable-handle");
             areas.forEach(area => {
+                // Сбрасывает каждую область перетаскивания
+                // до начальных размеров и анимации эмуляцией
+                // события снятия мыши с области перетаскивания.
                 const event = {target: area};
                 this.onAreaMouseUp(event as any as Event);
             });
@@ -237,14 +270,24 @@ export class ContentComponent implements AfterViewInit {
             if (!componentElement) return;
 
             if ((window.innerWidth - 62) === componentElement.clientWidth && (window.innerHeight - 16) === componentElement.clientHeight) {
+                // Если ширина и высота основного окна равны максимальным,
+                // значит сбрасывает состояние ресайза.
                 this.settings.resize.set(undefined)
                 return;
             }
+
+            // Если размеры не максимальны, значит задаёт состоянию ресайза
+            // корректные значения.
             this.settings.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
         });
 
         resizable.on("resizestart", () => {
-            this.settings.resize.set({ w: "100%", h: "100%" });
+            const componentElement = this.componentRef()?.nativeElement;
+            if (!componentElement) return;
+
+            // Если было начато действие ресайза,
+            // задаёт состоянию ресайза значение ширины и высоты окна.
+            this.settings.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
         });
 
         this.initResizableAreas();
@@ -257,13 +300,16 @@ export class ContentComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.initResizable();
 
+        // Обработка события сброса ресайза меню.
         window.addEventListener("resetsize", () => {
             const componentElement = this.componentRef()?.nativeElement;
             if (!componentElement) return;
 
+            // Задаёт меню максимальные значения.
             componentElement.style.width = "100%";
             componentElement.style.height = "100%";
 
+            // Сбрасывает состояние ресайза.
             this.settings.resize.set(undefined);
         });
     }
