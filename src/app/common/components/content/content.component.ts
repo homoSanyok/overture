@@ -98,12 +98,10 @@ export class ContentComponent implements AfterViewInit {
                     let width = parentElement.clientWidth * (isMobile ? 1 : .6);
                     let height = parentElement.clientHeight * .4;
 
-                    if (!isMobile) {
-                        // Если открыто не на мобильном устройстве,
-                        // задаёт максимальную ширину и минимальную высоту.
-                        if (width > 900) width = 900;
-                        if (height < 400) height = 400;
-                    }
+                    // Задаёт максимальную ширину и минимальную высоту.
+                    const minHeight = isMobile ? 330 : 400;
+                    if (width > 900) width = 900;
+                    if (height < minHeight) height = minHeight;
 
                     // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
@@ -124,12 +122,10 @@ export class ContentComponent implements AfterViewInit {
                     let width = parentElement.clientWidth * (isMobile ? 1 : .2);
                     let height = parentElement.clientHeight * (isMobile ? .2 : .1);
 
-                    if (!isMobile) {
-                        // Если открыто не на мобильном устройстве,
-                        // задаёт минимальные ширину и высоту.
-                        if (width < 330) width = 330;
-                        if (height < 300) height = 300;
-                    }
+                    // Задаёт минимальные ширину и высоту.
+                    const minHeight = isMobile ? 170 : 300;
+                    if (width < 330) width = 330;
+                    if (height < minHeight) height = minHeight;
 
                     // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
