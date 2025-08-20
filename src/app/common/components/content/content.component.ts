@@ -124,7 +124,7 @@ export class ContentComponent implements AfterViewInit {
 
                     // Задаёт минимальные ширину и высоту.
                     const minHeight = isMobile ? 170 : 300;
-                    if (width < 330) width = 330;
+                    if (width < 330 && !isMobile) width = 330;
                     if (height < minHeight) height = minHeight;
 
                     // Задаёт отступы относительно родительского контейнера для центровки.
