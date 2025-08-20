@@ -9,6 +9,7 @@ import {SettingsMenuPaletteComponent} from "../settings-menu-palette/settings-me
 
 // @ts-ignore
 import Resizable from "resizable"
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
     selector: 'app-content',
@@ -32,7 +33,14 @@ export class ContentComponent implements AfterViewInit {
      */
     private readonly settings = inject(SettingsService);
 
+    /**
+     * Объект Resizable.
+     * Устанавливается в функции {@link initResizable}.
+     * @private
+     */
     private resizable: any;
+
+    private readonly device = inject(DeviceDetectorService);
 
     /**
      * Ссылка на главный контейнер компонента.
@@ -76,6 +84,9 @@ export class ContentComponent implements AfterViewInit {
                 this.resizable.destroy();
             } catch {}
 
+            // Открыто ли приложение на мобильном устройстве
+            const isMobile = this.device.isMobile();
+
             switch (selectedMenu) {
                 case "edit": {
                     // Если было выбрано меню редактирования элемента link.
@@ -84,12 +95,15 @@ export class ContentComponent implements AfterViewInit {
                     componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
                     // Относительные высота и ширина открываемого меню.
-                    let width = parentElement.clientWidth * .6;
+                    let width = parentElement.clientWidth * (isMobile ? 1 : .6);
                     let height = parentElement.clientHeight * .4;
 
-                    // Задаёт максимальную ширину и минимальную высоту.
-                    if (width > 900) width = 900;
-                    if (height < 400) height = 400;
+                    if (!isMobile) {
+                        // Если открыто не на мобильном устройстве,
+                        // задаёт максимальную ширину и минимальную высоту.
+                        if (width > 900) width = 900;
+                        if (height < 400) height = 400;
+                    }
 
                     // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
@@ -107,12 +121,15 @@ export class ContentComponent implements AfterViewInit {
                     componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
 
                     // Относительные высота и ширина открываемого меню.
-                    let width = parentElement.clientWidth * .2;
-                    let height = parentElement.clientHeight * .1;
+                    let width = parentElement.clientWidth * (isMobile ? 1 : .2);
+                    let height = parentElement.clientHeight * (isMobile ? .2 : .1);
 
-                    // Задаёт минимальные ширину и высоту.
-                    if (width < 330) width = 330;
-                    if (height < 300) height = 300;
+                    if (!isMobile) {
+                        // Если открыто не на мобильном устройстве,
+                        // задаёт минимальные ширину и высоту.
+                        if (width < 330) width = 330;
+                        if (height < 300) height = 300;
+                    }
 
                     // Задаёт отступы относительно родительского контейнера для центровки.
                     componentElement.style.marginLeft = `calc((${parentElement.clientWidth}px - ${width}px) / 2)`;
@@ -253,10 +270,16 @@ export class ContentComponent implements AfterViewInit {
 
     /**
      * Функция инициализирует работу с Resizable.
-     * Генерирует объект `Resizable`, записывая его в {@link resizableInstance}.
+     * Генерирует объект `Resizable`, записывая его в {@link resizable}.
      * @private
      */
     private initResizable() {
+        if (this.device.isMobile()) {
+            // Если приложение запущено на мобильном устройстве,
+            // не инициализировать ресайзер.
+            return;
+        }
+
         const componentElement = this.componentRef()?.nativeElement;
         if (!componentElement) return;
 

@@ -6,7 +6,7 @@
                 class="container__iframe"
                 (load)="onLoaded($event)">
         </iframe>
-    } @else {
+    } @else if (!isMobile()) {
         <img class="container__resize-icon"
              src="resize.svg" width="16" height="16">
     }

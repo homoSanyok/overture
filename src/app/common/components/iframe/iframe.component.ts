@@ -6,6 +6,7 @@ import {SettingsService} from '../../../services/settings.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {v4 as uuid} from 'uuid';
 import {ProgressSpinner} from "primeng/progressspinner";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
     selector: 'app-iframe',
@@ -27,6 +28,8 @@ export class IframeComponent {
      */
     private readonly settings = inject(SettingsService);
 
+    private readonly device = inject(DeviceDetectorService);
+
     private readonly sanitizer = inject(DomSanitizer);
 
     /**
@@ -34,6 +37,13 @@ export class IframeComponent {
      * загрузка сайта.
      */
     readonly loading = signal<boolean>(false);
+
+    /**
+     * Возвращает шаблону значение bool: открыто ли приложение на мобильном устройстве.
+     */
+    readonly isMobile = computed(() => {
+       return this.device.isMobile();
+    });
 
     /**
      * Возвращает ссылку текущего выбранного элемента link для шаблона.
