@@ -21,9 +21,13 @@
     }
 
     &-edit-button {
+      display: none;
       position: absolute;
       top: 7px;
       left: 46px;
+    }
+    &-edit-button.visible {
+      display: block;
     }
   }
 }

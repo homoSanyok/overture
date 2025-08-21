@@ -2,11 +2,13 @@
  * @module NavbarComponent
  */
 
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, ElementRef, inject, viewChild} from '@angular/core';
 import {SettingsButtonComponent} from '../settings-button/settings-button.component';
 import {SettingsService} from '../../../services/settings.service';
 import {ButtonComponent} from '../../../shared/button/button.component';
 import {LinkT} from '../../types/LinkT';
+import Sortable from "sortablejs";
+import {ResizeService} from "../../../services/resize.service";
 
 @Component({
     selector: 'app-navbar',
@@ -26,11 +28,8 @@ import {LinkT} from '../../types/LinkT';
  * отображает компонент {@link SettingsButtonComponent}.
  */
 export class NavbarComponent {
-    /**
-     * {@link SettingsService}
-     * @private
-     */
     private readonly settings = inject(SettingsService);
+    private readonly resize = inject(ResizeService);
 
     /**
      * Возвращает {@link SettingsService.links} для шаблона.
@@ -54,6 +53,20 @@ export class NavbarComponent {
     });
 
     /**
+     * Возвращает {@link SettingsService.open} для шаблона.
+     */
+    readonly settingsOpen = computed(() => {
+        return this.settings.open();
+    });
+
+    /**
+     * Ссылка на DOM элемент списка объектов links.
+     * Используется для активации перетаскивания элементов links.
+     * @private
+     */
+    private readonly linksList = viewChild<ElementRef<HTMLDivElement>>("linksList");
+
+    /**
      * Возвращает булевое значение состояния {@link SettingsService.resize} для шаблона.
      *
      * Если размер области был изменён, вернёт `true`.
@@ -63,7 +76,7 @@ export class NavbarComponent {
         const selectedMenu = this.settings.selectedMenu();
         if (!selectedMenu) {
             // Если выбрано основное меню
-            return Boolean(this.settings.resize());
+            return Boolean(this.resize.resize());
         }
 
         return false;
@@ -138,5 +151,14 @@ export class NavbarComponent {
      */
     onClickResizeButton() {
         window.dispatchEvent(new Event('resetsize'));
+    }
+
+    ngOnInit() {
+        const linksList = this.linksList()?.nativeElement;
+        if (!linksList) return;
+
+        const storable = Sortable.create(linksList, {
+            animation: 150
+        });
     }
 }

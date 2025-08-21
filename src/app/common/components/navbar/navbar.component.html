@@ -1,5 +1,6 @@
 <div class="container">
-    <div class="container__content">
+    <div class="container__content"
+         #linksList>
         @for (link of links(); track link.id) {
             <div class="container__content-button">
                 <app-button [link]="link"
@@ -7,15 +8,15 @@
                             (click)="onClickLink(link)"
                 ></app-button>
 
-                @let editButton =
-                    {
-                        id: link.id,
-                        iconSrc: "edit.svg",
-                        label: "",
-                        path: "",
-                    };
+                @let editButton = {
+                    id: link.id,
+                    iconSrc: "edit.svg",
+                    label: "",
+                    path: "",
+                };
 
-                <div class="container__content-edit-button">
+                <div class="container__content-edit-button"
+                     [class.visible]="settingsOpen()">
                     <app-button
                             [link]="editButton"
                             [selected]="selectedEditingLink()?.id === link.id"

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {NavbarComponent} from './common/components/navbar/navbar.component';
 import {SettingsService} from './services/settings.service';
 import {ContentComponent} from './common/components/content/content.component';
+import {ResizeService} from "./services/resize.service";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import {ContentComponent} from './common/components/content/content.component';
     NavbarComponent,
     ContentComponent
   ],
-  providers: [SettingsService],
+  providers: [SettingsService, ResizeService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
