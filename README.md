@@ -1,4 +1,35 @@
-# Overture
+<h1 align="center">Overture</h1>
+
+<p align="center">
+  <img src="public/favicon.ico" alt="overture-logo" width="120px" height="120px"/>
+  <br>
+    <em>
+        Overture - это ваш локальный менеджер веб приложений
+    </em>
+  <br>
+</p>
+
+<p align="center">
+  <a href="https://homosanyok.github.io/overture/"><strong>Демо приложения</strong></a>
+  <br>
+</p>
+
+<p align="center">
+  <a href="https://v18.angular.dev/overview">
+    <img src="https://img.shields.io/badge/Angular-v18-%234caf50?logo=angular" alt="Angular" />
+  </a>
+  <a href="https://sortablejs.github.io/Sortable/?ref=vanillalist">
+    <img src="https://img.shields.io/badge/SortableJS-v1.15.6-%234caf50" alt="SortableJS" />
+  </a>
+  <a href="https://dy.github.io/resizable/">
+    <img src="https://img.shields.io/badge/Resizable-v2.0.0-%234caf50" alt="Resizable" />
+  </a>
+  <a href="https://ahsanayaz.github.io/ngx-device-detector/">
+    <img src="https://img.shields.io/badge/ngxDeviceDetector-v8.0.0-%234caf50?label=ngx-device-detector" alt="ngx-device-detector" />
+  </a>
+</p>
+
+# Описание
 
 Пет-проект, который я реализовал специально для минимальной демонстрации своего понимания Angular и
 web разработки в принципе.
