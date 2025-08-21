@@ -1,7 +1,7 @@
 /**
  * @module SettingsMenuPaletteComponent
  */
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, inject, OnDestroy, OnInit} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {Presets} from "../../constants/Presets";
 import {PresetT} from "../../types/PresetT";
@@ -20,11 +20,7 @@ import {PresetT} from "../../types/PresetT";
  * Выбранный пользователем цвет меняет цветовую тему приложения и
  * сохраняет это состояние в локальной памяти.
  */
-export class SettingsMenuPaletteComponent {
-    /**
-     * {@link SettingsService}.
-     * @private
-     */
+export class SettingsMenuPaletteComponent implements OnInit, OnDestroy {
     private settings = inject(SettingsService);
 
     readonly Presets = Presets;
@@ -54,4 +50,19 @@ export class SettingsMenuPaletteComponent {
 
         this.settings.selectedPreset.set(preset);
     }
+
+    /**
+     * Функция обработки нажатия по клавишам.
+     * Если был нажат `enter` закрывает меню выбора цветовой схемы.
+     *
+     * @param event
+     * @private
+     */
+    private onKeyDown(event: KeyboardEvent) {
+        if (event.key !== "Enter") return;
+        this.settings.selectedMenu.set(undefined);
+    }
+
+    ngOnInit() { document.addEventListener("keydown", this.onKeyDown.bind(this)); }
+    ngOnDestroy() { document.removeEventListener("keydown", this.onKeyDown.bind(this)); }
 }

@@ -1,7 +1,7 @@
 /**
  * @module SettingsMenuEditComponent
  */
-import {Component, computed, effect, inject, untracked} from '@angular/core';
+import {Component, computed, effect, inject, OnDestroy, OnInit, untracked} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {v4 as uuid} from 'uuid';
 import {SettingsService} from '../../../services/settings.service';
@@ -31,7 +31,7 @@ import {LinksService} from "../../../services/links.service";
  * Предоставляет интерфейс создания и редактирования элемента link.
  * В режиме редактирования доступен интерфейс удаления элемента.
  */
-export class SettingsMenuEditComponent {
+export class SettingsMenuEditComponent implements OnInit, OnDestroy {
     private readonly settings = inject(SettingsService);
     private readonly links = inject(LinksService);
 
@@ -231,7 +231,25 @@ export class SettingsMenuEditComponent {
         });
     }
 
+    /**
+     * Функция обработки нажатия по клавишам.
+     * Если был нажат `enter` и не выбраны кнопки, вызывает функцию
+     * сохранения введённых значений {@link onClickSave}.
+     *
+     * @param event
+     * @private
+     */
+    private onKeyDown(event: KeyboardEvent) {
+        if (event.key !== "Enter") return;
+        if (document.activeElement?.nodeName === "BUTTON") return;
+
+        untracked(() => this.onClickSave());
+    }
+
     constructor() {
         effect(this.onSelectedEditingLinkChanged.bind(this));
     }
+
+    ngOnInit() { document.addEventListener("keydown", this.onKeyDown.bind(this)); }
+    ngOnDestroy() { document.removeEventListener("keydown", this.onKeyDown.bind(this)); }
 }
