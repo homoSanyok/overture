@@ -1,25 +1,25 @@
 <div
   class="container"
-  [style.width]="_size === 'm' ? '38px' : '24px'"
-  [style.height]="_size === 'm' ? '38px' : '24px'"
+  [style.width]="_size() === 'm' ? '38px' : '24px'"
+  [style.height]="_size() === 'm' ? '38px' : '24px'"
   #componentRef
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
-  [pTooltip]="sortable ? undefined : label"
+  [pTooltip]="sortable() ? undefined : label()"
   tooltipPosition="right"
   showDelay="500"
 >
-  @if (icon) {
+  @if (icon()) {
   <img
-    [src]="icon"
-    [width]="_size === 'm' ? 24 : 16"
-    [height]="_size === 'm' ? 24 : 16"
+    [src]="icon()"
+    [width]="_size() === 'm' ? 24 : 16"
+    [height]="_size() === 'm' ? 24 : 16"
   />
   } @else {
   <img
     src="image.svg"
-    [width]="_size === 'm' ? 24 : 16"
-    [height]="_size === 'm' ? 24 : 16"
+    [width]="_size() === 'm' ? 24 : 16"
+    [height]="_size() === 'm' ? 24 : 16"
   />
   }
 </div>

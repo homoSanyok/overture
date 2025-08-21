@@ -55,7 +55,7 @@ export class IframeComponent {
             return;
         }
 
-        if (url.indexOf("localhost") !== -1) {
+        if (url.indexOf(location.host) !== -1) {
             // Если обращение идёт на localhost,
             // значит пользователь захотел рекурсии...
             if (url.at(-1) !== '/') url = `${url}/`;
