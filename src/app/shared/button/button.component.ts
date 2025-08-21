@@ -1,6 +1,7 @@
-import {Component, effect, ElementRef, input, signal, untracked, viewChild} from '@angular/core';
+import {Component, effect, ElementRef, inject, input, signal, untracked, viewChild} from '@angular/core';
 import {LinkT} from '../../common/types/LinkT';
 import {Tooltip} from "primeng/tooltip";
+import {LinksService} from "../../services/links.service";
 
 @Component({
     selector: 'app-button',
@@ -12,6 +13,8 @@ import {Tooltip} from "primeng/tooltip";
     styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
+    private readonly links = inject(LinksService);
+
     /**
      * Ключ, по которому в локальной памяти хранится ссылка на изображение или
      * xml разметка svg изображения.
@@ -72,10 +75,20 @@ export class ButtonComponent {
     }
 
     /**
+     * Возвращает состояние процесса перетаскивания для шаблона.
+     */
+    get sortable() {
+        return this.links.sortable();
+    }
+
+    /**
      * Функция обработки перехода мыши на компонент.
      * Меняет состояние сигнала {@link hovered} относительно положения мыши: она за компонентом или внутри.
      */
     onMouseEnter() {
+        const sortable = this.links.sortable();
+        if (sortable) return;
+
         const hovered = this.hovered();
         if (hovered) return;
 
@@ -153,4 +166,6 @@ export class ButtonComponent {
         effect(this.onHoveredChanged.bind(this));
         effect(this.onSelectedChanged.bind(this));
     }
+
+    protected readonly untracked = untracked;
 }

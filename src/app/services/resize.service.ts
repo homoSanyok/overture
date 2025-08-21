@@ -18,7 +18,7 @@ export class ResizeService {
      * Если размер области был изменён, то в сигнал запишутся значения размеров области
      * и в навигационной панели появится кнопка возврата размера в исходное состояние.
      */
-    readonly resize = signal<{ w: string, h: string } | undefined>(this.storageResize());
+    readonly resize = signal<{ w: string, h: string } | undefined>(this.readStorageResize());
 
     /**
      * Возвращает храняющуюся в локальной памяти конфигурацию
@@ -26,7 +26,7 @@ export class ResizeService {
      *
      * @private
      */
-    private storageResize() {
+    private readStorageResize() {
         const storageData = localStorage.getItem("resize");
         if (!storageData) return;
 

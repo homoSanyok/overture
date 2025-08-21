@@ -10,7 +10,7 @@ import {Button, ButtonIcon} from 'primeng/button';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Message} from 'primeng/message';
-import {FileUpload} from "primeng/fileupload";
+import {LinksService} from "../../../services/links.service";
 
 @Component({
     selector: 'app-settings-menu-edit',
@@ -21,8 +21,6 @@ import {FileUpload} from "primeng/fileupload";
         FloatLabel,
         InputText,
         Message,
-        FileUpload,
-        ButtonIcon
     ],
     templateUrl: './settings-menu-edit.component.html',
     styleUrl: './settings-menu-edit.component.scss'
@@ -34,11 +32,8 @@ import {FileUpload} from "primeng/fileupload";
  * В режиме редактирования доступен интерфейс удаления элемента.
  */
 export class SettingsMenuEditComponent {
-    /**
-     * {@link SettingsService}
-     * @private
-     */
     private readonly settings = inject(SettingsService);
+    private readonly links = inject(LinksService);
 
     /**
      * Группа контроллеров форм ввода параметров элемента link.
@@ -119,7 +114,7 @@ export class SettingsMenuEditComponent {
             path: path
         }
 
-        let links = structuredClone(this.settings.links());
+        let links = structuredClone(this.links.links());
         if (!links) {
             // Если в системе нет сохранённых элементов link (глобальный сигнал хранит значение undefined),
             // задаёт пустой массив
@@ -127,7 +122,7 @@ export class SettingsMenuEditComponent {
         }
 
         links.push(link);
-        this.settings.links.set(links);
+        this.links.links.set(links);
         this.settings.open.set(false);
     }
 
@@ -144,7 +139,7 @@ export class SettingsMenuEditComponent {
             return;
         }
 
-        const links = this.settings.links();
+        const links = this.links.links();
         if (!links) {
             // Если в системе на данный момент нет сохранённых элементов link.
             return;
@@ -167,7 +162,7 @@ export class SettingsMenuEditComponent {
                 return link;
             });
 
-        this.settings.links.set(newLinks);
+        this.links.links.set(newLinks);
         this.settings.selectedEditingLink.set(undefined);
         this.settings.open.set(false);
     }
@@ -187,7 +182,7 @@ export class SettingsMenuEditComponent {
             return;
         }
 
-        const links = this.settings.links();
+        const links = this.links.links();
         if (!links) {
             // Если в системе на данный момент нет сохранённых элементов link.
             return;
@@ -197,7 +192,7 @@ export class SettingsMenuEditComponent {
         // который пользователь выбрал для удаления.
         const newLinks = structuredClone(links).filter(link => link.id !== selectedEditingLink.id);
 
-        this.settings.links.set(newLinks);
+        this.links.links.set(newLinks);
         this.settings.selectedEditingLink.set(undefined);
         this.settings.open.set(false);
     }

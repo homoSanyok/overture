@@ -2,13 +2,14 @@
  * @module NavbarComponent
  */
 
-import {Component, computed, ElementRef, inject, viewChild} from '@angular/core';
+import {Component, computed, ElementRef, inject, OnInit, viewChild} from '@angular/core';
 import {SettingsButtonComponent} from '../settings-button/settings-button.component';
 import {SettingsService} from '../../../services/settings.service';
 import {ButtonComponent} from '../../../shared/button/button.component';
 import {LinkT} from '../../types/LinkT';
 import Sortable from "sortablejs";
 import {ResizeService} from "../../../services/resize.service";
+import {LinksService} from "../../../services/links.service";
 
 @Component({
     selector: 'app-navbar',
@@ -27,15 +28,16 @@ import {ResizeService} from "../../../services/resize.service";
  * списка кнопок редактирования этих элементов, а также
  * отображает компонент {@link SettingsButtonComponent}.
  */
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
     private readonly settings = inject(SettingsService);
     private readonly resize = inject(ResizeService);
+    private readonly links = inject(LinksService);
 
     /**
      * Возвращает {@link SettingsService.links} для шаблона.
      */
-    readonly links = computed(() => {
-        return this.settings.links();
+    readonly _links = computed(() => {
+        return this.links.links();
     });
 
     /**
@@ -153,12 +155,35 @@ export class NavbarComponent {
         window.dispatchEvent(new Event('resetsize'));
     }
 
-    ngOnInit() {
+    /**
+     * Функция инициализирует возможность сортировки компонентов
+     * перетаскиванием.
+     * @private
+     */
+    private initSortable() {
         const linksList = this.linksList()?.nativeElement;
         if (!linksList) return;
 
         const storable = Sortable.create(linksList, {
-            animation: 150
+            animation: 150,
+            onStart: () => this.links.sortable.set(true),
+            onEnd: (event) => {
+                this.links.sortable.set(false);
+
+                this.links.links.update(links => {
+                   if (!links || event.newIndex === undefined || event.oldIndex === undefined) return;
+
+                   const sortableLinks = structuredClone(links);
+                   const [movedItem] = sortableLinks.splice(event.oldIndex, 1);
+                   sortableLinks.splice(event.newIndex, 0, movedItem);
+
+                   return sortableLinks;
+                });
+            },
         });
+    }
+
+    ngOnInit() {
+        this.initSortable();
     }
 }

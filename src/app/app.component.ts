@@ -3,6 +3,7 @@ import {NavbarComponent} from './common/components/navbar/navbar.component';
 import {SettingsService} from './services/settings.service';
 import {ContentComponent} from './common/components/content/content.component';
 import {ResizeService} from "./services/resize.service";
+import {LinksService} from "./services/links.service";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import {ResizeService} from "./services/resize.service";
     NavbarComponent,
     ContentComponent
   ],
-  providers: [SettingsService, ResizeService],
+  providers: [SettingsService, ResizeService, LinksService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

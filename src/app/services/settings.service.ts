@@ -6,6 +6,7 @@ import {PresetNameT, PresetT} from "../common/types/PresetT";
 import {Presets} from "../common/constants/Presets";
 import {palette, usePreset} from "@primeng/themes";
 import {PrimeNG} from "primeng/config";
+import {LinksService} from "./links.service";
 
 @Injectable()
 /**
@@ -13,6 +14,7 @@ import {PrimeNG} from "primeng/config";
  */
 export class SettingsService {
     private readonly primeng = inject(PrimeNG);
+    private readonly links = inject(LinksService);
 
     /**
      * Сигнал хранит состояние, открыто ли меню настроек.
@@ -35,13 +37,6 @@ export class SettingsService {
     readonly selectedEditingLink = signal<LinkT | undefined>(undefined);
 
     /**
-     * Сигнал хранит состояние списка всех доступных элементов ссылок системы.
-     * При инициализации сервиса, подгружает все элементы из локального хранилища.
-     * При изменении значения сигнала обновляет локальное хранилище.
-     */
-    readonly links = signal<LinkT[] | undefined>(undefined);
-
-    /**
      * Сигнал хранит состояние текущего выбранного пресета темы приложения.
      * По умолчанию подгружается пресет зелёной темы.
      * При инициализации сервиса подгружает последний выбранный пользователем пресет и устанавливает его.
@@ -50,13 +45,13 @@ export class SettingsService {
     readonly selectedPreset = signal<PresetT>({ name: "green", preset: GreenPreset, options: { darkModeSelector: false } });
 
     /**
-     * Обработка изменения состояния сигнала {@link links}.
-     * По изменении перезаписывает текущий список элементов ссылок
-     * в локальное хранилище.
+     * Обработка изменения состояния сигнала {@link LinksService.links}.
+     * По изменении перезаписывает текущую выбранную ссылку, если такая была.
+     * Если текущая выбранная ссылка была удалена из общего списка, записывает undefined.
      * @private
      */
     private onLinksChanged() {
-        const links = this.links();
+        const links = this.links.links();
         if (!links) return;
 
         untracked(() => {
@@ -65,24 +60,6 @@ export class SettingsService {
 
             this.selectedLink.set(links.find(link => link.id === selectedLink.id));
         });
-
-        localStorage.setItem("links", JSON.stringify(links));
-    }
-
-    /**
-     * Читает из локальной памяти список всех ссылок и записывает
-     * в сигнал {@link links}. Функция вызывается при инициализации сервиса.
-     * @private
-     */
-    private readStorageLinks() {
-        const storageLinks = localStorage.getItem("links");
-        if (!storageLinks) {
-            this.links.set([]);
-            return;
-        }
-
-        const parsedLinks: LinkT[] = JSON.parse(storageLinks);
-        this.links.set(parsedLinks);
     }
 
     /**
@@ -106,7 +83,7 @@ export class SettingsService {
      * Функция вызывается при запуске сервиса.
      * @private
      */
-    private readStoragePreset() {
+    private setStoragePreset() {
         const storagePresetName = localStorage.getItem("preset") as PresetNameT | null;
         if (!storagePresetName) {
             localStorage.setItem("preset", "green");
@@ -147,7 +124,6 @@ export class SettingsService {
         effect(this.onOpenChanged.bind(this));
         effect(this.onSelectedPresetChanged.bind(this));
 
-        this.readStorageLinks();
-        this.readStoragePreset();
+        this.setStoragePreset();
     }
 }

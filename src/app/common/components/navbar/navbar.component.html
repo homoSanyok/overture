@@ -1,7 +1,7 @@
 <div class="container">
     <div class="container__content"
          #linksList>
-        @for (link of links(); track link.id) {
+        @for (link of _links(); track link.id) {
             <div class="container__content-button">
                 <app-button [link]="link"
                             [selected]="selectedLink()?.id === link.id && !selectedEditingLink()"

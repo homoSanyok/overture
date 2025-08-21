@@ -5,7 +5,7 @@
   #componentRef
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
-  [pTooltip]="label"
+  [pTooltip]="sortable ? undefined : label"
   tooltipPosition="right"
   showDelay="500"
 >
