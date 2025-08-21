@@ -66,6 +66,12 @@ export class IframeComponent {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     });
 
+    /**
+     * Функция обработки загрузки контента iframe.
+     * Проверяет, действительно ли контент внутри iframe был загружен
+     * и задаёт сигналу {@link loading} новое значение.
+     * @param event
+     */
     onLoaded(event: Event) {
         const isLoaded = Boolean((event.target as HTMLIFrameElement).src);
 

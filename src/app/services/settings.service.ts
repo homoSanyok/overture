@@ -86,13 +86,19 @@ export class SettingsService {
     private setStoragePreset() {
         const storagePresetName = localStorage.getItem("preset") as PresetNameT | null;
         if (!storagePresetName) {
+            // Если пресета в локальной памяти нет,
+            // записывает в память стандартный зелёный.
             localStorage.setItem("preset", "green");
             return;
         }
 
         const selectedPreset = this.selectedPreset();
+        // Если текущий выбранный пресет совпадает с тем,
+        // что в локальной памяти, ничего не делать.
         if (selectedPreset.name === storagePresetName) return;
 
+        // Ищет объект пресета по названию и если такого объекта нет
+        // ничего не делает.
         const storagePreset = Presets.find(preset => preset.name === storagePresetName);
         if (!storagePreset) return;
 

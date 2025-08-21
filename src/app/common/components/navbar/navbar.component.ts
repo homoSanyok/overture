@@ -171,13 +171,16 @@ export class NavbarComponent implements OnInit {
                 this.links.sortable.set(false);
 
                 this.links.links.update(links => {
-                   if (!links || event.newIndex === undefined || event.oldIndex === undefined) return;
+                    // Если элементов ссылок нет или нет индексов элементов, ничего не делать.
+                    if (!links || event.newIndex === undefined || event.oldIndex === undefined) return;
 
-                   const sortableLinks = structuredClone(links);
-                   const [movedItem] = sortableLinks.splice(event.oldIndex, 1);
-                   sortableLinks.splice(event.newIndex, 0, movedItem);
+                    // Удаление перетаскиваемого элемента из массива и
+                    // вставка его в новое место в массиве.
+                    const sortableLinks = structuredClone(links);
+                    const [movedItem] = sortableLinks.splice(event.oldIndex, 1);
+                    sortableLinks.splice(event.newIndex, 0, movedItem);
 
-                   return sortableLinks;
+                    return sortableLinks;
                 });
             },
         });

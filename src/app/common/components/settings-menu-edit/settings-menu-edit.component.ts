@@ -6,7 +6,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {v4 as uuid} from 'uuid';
 import {SettingsService} from '../../../services/settings.service';
 import {LinkT} from '../../types/LinkT';
-import {Button, ButtonIcon} from 'primeng/button';
+import {Button} from 'primeng/button';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Message} from 'primeng/message';

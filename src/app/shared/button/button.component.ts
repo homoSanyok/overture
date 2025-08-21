@@ -1,4 +1,7 @@
-import {Component, effect, ElementRef, inject, input, signal, untracked, viewChild} from '@angular/core';
+/**
+ * @module ButtonComponent
+ */
+import {Component, computed, effect, ElementRef, inject, input, signal, untracked, viewChild} from '@angular/core';
 import {LinkT} from '../../common/types/LinkT';
 import {Tooltip} from "primeng/tooltip";
 import {LinksService} from "../../services/links.service";
@@ -12,6 +15,9 @@ import {LinksService} from "../../services/links.service";
     templateUrl: './button.component.html',
     styleUrl: './button.component.scss'
 })
+/**
+ * Стандартный компонент кнопки.
+ */
 export class ButtonComponent {
     private readonly links = inject(LinksService);
 
@@ -54,32 +60,30 @@ export class ButtonComponent {
      * Геттер возвращает ссылку на изображение или undefined,
      * в зависимости от значения поля `imageSrc` сигнала {@link button}.
      */
-    get icon() {
-        const icon = this.link().iconSrc;
-
-        return icon;
-    }
+    readonly icon = computed(() => {
+        return this.link().iconSrc;
+    });
 
     /**
      * Геттер размера иконки для шаблона.
      */
-    get _size() {
+    readonly _size = computed(() => {
         return this.size();
-    }
+    });
 
     /**
      * Получение заголовка кнопки дял шаблона.
      */
-    get label() {
+    readonly label = computed(() => {
         return this.link().label;
-    }
+    });
 
     /**
      * Возвращает состояние процесса перетаскивания для шаблона.
      */
-    get sortable() {
+    readonly sortable = computed(() => {
         return this.links.sortable();
-    }
+    });
 
     /**
      * Функция обработки перехода мыши на компонент.
@@ -87,9 +91,13 @@ export class ButtonComponent {
      */
     onMouseEnter() {
         const sortable = this.links.sortable();
+        // Если пользователь перетаскивает какой-либо элемент,
+        // ничего не делать.
         if (sortable) return;
 
         const hovered = this.hovered();
+        // Если состояние hovered и так было true,
+        // ничего не делать.
         if (hovered) return;
 
         this.hovered.set(true);
@@ -101,6 +109,8 @@ export class ButtonComponent {
      */
     onMouseLeave() {
         const hovered = this.hovered();
+        // Если состояние hovered и так было false,
+        // ничего не делать.
         if (!hovered) return;
 
         this.hovered.set(false);
@@ -150,13 +160,13 @@ export class ButtonComponent {
             const componentElement = componentRef.nativeElement;
 
             if (selected) {
-                // Если кнопка выбрана
+                // Если кнопка выбрана, задать цвет фона.
                 componentElement.style.background = "var(--p-primary-500)";
             } else if (componentElement.matches(":hover")) {
-                // Если мышь наведена и кнопка не выбрана
+                // Если мышь наведена и кнопка не выбрана, задать цвет фона.
                 componentElement.style.background = "var(--p-primary-200)";
             } else {
-                // Если мышь не наведена и кнопка не выбрана
+                // Если мышь не наведена и кнопка не выбрана, задать цвет фона.
                 componentElement.style.background = "var(--p-primary-100)";
             }
         });
@@ -166,6 +176,4 @@ export class ButtonComponent {
         effect(this.onHoveredChanged.bind(this));
         effect(this.onSelectedChanged.bind(this));
     }
-
-    protected readonly untracked = untracked;
 }
