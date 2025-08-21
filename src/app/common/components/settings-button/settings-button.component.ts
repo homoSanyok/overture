@@ -11,7 +11,6 @@ import {APP_BASE_HREF, NgOptimizedImage} from "@angular/common";
     standalone: true,
     imports: [
         SettingsPanelComponent,
-        NgOptimizedImage
     ],
     templateUrl: './settings-button.component.html',
     styleUrl: './settings-button.component.scss'
@@ -47,7 +46,7 @@ export class SettingsButtonComponent {
      * Необходим для применения стилей при выборе компонента.
      * @private
      */
-    private readonly selected = signal<boolean>(false);
+    readonly selected = signal<boolean>(false);
 
     /**
      * Функция обработки перехода мыши на компонент.

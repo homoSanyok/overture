@@ -21,13 +21,15 @@
     }
 
     &-edit-button {
-      display: none;
+      transform: scale(0);
       position: absolute;
       top: 7px;
       left: 46px;
+
+      transition: transform 300ms;
     }
     &-edit-button.visible {
-      display: block;
+      transform: scale(1);
     }
   }
 }

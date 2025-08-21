@@ -1,11 +1,14 @@
 <app-settings-panel></app-settings-panel>
 
-<div class="container" #componentRef
+<div #componentRef
+     class="container"
      (mouseenter)="onMouseEnter()"
      (mouseleave)="onMouseLeave()"
      (click)="onClick()">
-  <img src="gear.svg"
-       width="24"
-       height="24"
-       [style.color]="'var(--p-text-muted-color)'"/>
+    <img class="container__icon"
+         [class.rotated]="selected()"
+         src="gear.svg"
+         width="24"
+         height="24"
+         [style.color]="'var(--p-text-muted-color)'"/>
 </div>
