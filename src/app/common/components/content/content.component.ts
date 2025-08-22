@@ -170,7 +170,7 @@ export class ContentComponent implements AfterViewInit {
      * @private
      */
     private readonly MOUSE_DOWN_SIZE = 400;
-    private readonly MOUSE_UP_SIZE = 10;
+    private readonly MOUSE_UP_SIZE = 20;
 
     /**
      * Функция обработки нажатия мыши на компонент области ресайза.
