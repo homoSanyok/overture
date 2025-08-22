@@ -125,7 +125,7 @@ export class SettingsPanelComponent {
     }
 
     constructor() {
-        effect(this.onSettingsOpen.bind(this));
+        // effect(this.onSettingsOpen.bind(this));
     }
 
     protected readonly open = open;

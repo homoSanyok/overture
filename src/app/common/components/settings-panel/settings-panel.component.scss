@@ -9,7 +9,7 @@
   display: flex;
   visibility: hidden;
   background: var(--p-primary-100);
-  transition: width var(--transition);
+  transition: width var(--transition), visibility var(--transition);
 
   border-radius: 0 8px 0 0;
 
@@ -17,5 +17,6 @@
   overflow: hidden;
 }
 .container.opened {
+  width: calc(2 * 38px);
   visibility: visible;
 }

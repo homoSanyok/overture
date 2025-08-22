@@ -12,7 +12,7 @@
 
   user-select: none;
 
-  transition: background var(--transition);
+  transition: background var(--transition), visibility var(--transition);
 
   background: var(--p-primary-100);
 }
