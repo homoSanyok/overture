@@ -284,6 +284,15 @@ export class ContentComponent implements AfterViewInit {
             draggable: false
         });
 
+        this.resizable.on("resizestart", () => {
+            const componentElement = this.componentRef()?.nativeElement;
+            if (!componentElement) return;
+
+            // Если было начато действие ресайза,
+            // задаёт состоянию ресайза значение ширины и высоты окна.
+            this.resize.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
+        });
+
         this.resizable.on("resizeend", () => {
             const areas = document.querySelectorAll(".resizable-handle");
             areas.forEach(area => {
@@ -304,18 +313,17 @@ export class ContentComponent implements AfterViewInit {
                 return;
             }
 
+            const parentElement = componentElement.parentElement;
+            if (!parentElement) return;
+
+            // Высота и ширина в процентах, чтобы не было бага
+            // при переходе с одного размера экрана на другой
+            const percentWidth = (componentElement.clientWidth * 100) / parentElement.clientWidth;
+            const percentHeight = (componentElement.clientHeight * 100) / parentElement.clientHeight;
+
             // Если размеры не максимальны, значит задаёт состоянию ресайза
-            // корректные значения.
-            this.resize.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
-        });
-
-        this.resizable.on("resizestart", () => {
-            const componentElement = this.componentRef()?.nativeElement;
-            if (!componentElement) return;
-
-            // Если было начато действие ресайза,
-            // задаёт состоянию ресайза значение ширины и высоты окна.
-            this.resize.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
+            // текущие значения.
+            this.resize.resize.set({ w: `${percentWidth}%`, h: `${percentHeight}%` });
         });
 
         this.initResizableAreas();
