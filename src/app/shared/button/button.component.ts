@@ -46,15 +46,7 @@ export class ButtonComponent {
      * Необходим для применения стилей при наведении.
      * @private
      */
-    private readonly hovered = signal<boolean>(false);
-
-    /**
-     * Ссылка на компонент.
-     * Используется для смены стилей компонента при изменении
-     * его состояния.
-     * @private
-     */
-    private readonly componentRef = viewChild<ElementRef<HTMLDivElement>>('componentRef');
+    readonly hovered = signal<boolean>(false);
 
     /**
      * Геттер возвращает ссылку на изображение или undefined,
@@ -95,6 +87,10 @@ export class ButtonComponent {
         // ничего не делать.
         if (sortable) return;
 
+        const selected = this.selected();
+        // Если кнопка нажата, ничего не делать.
+        if (selected) return;
+
         const hovered = this.hovered();
         // Если состояние hovered и так было true,
         // ничего не делать.
@@ -114,66 +110,5 @@ export class ButtonComponent {
         if (!hovered) return;
 
         this.hovered.set(false);
-    }
-
-    /**
-     * Функция обработки изменения состояния сигнала {@link hovered}.
-     *
-     * Если значение сигнала `true`, компоненту присваивается default цвет фона.
-     * Если значение сигнала `false`, компоненту присваивается hover цвет фона.
-     */
-    private onHoveredChanged() {
-        const hovered = this.hovered();
-
-        untracked(() => {
-            const selected = this.selected();
-            // Если кнопка нажата, ничего не делать
-            if (selected) return;
-
-            const componentRef = this.componentRef();
-            if (!componentRef) return;
-
-            const componentElement = componentRef.nativeElement;
-
-            if (hovered) {
-                // Если мышь наведена, задать цвет фона
-                componentElement.style.background = "var(--p-primary-200)";
-                return;
-            }
-            // Если мышь не наведена, задать цвет фона
-            componentElement.style.background = "var(--p-primary-100)";
-        });
-    }
-
-    /**
-     * Функция обработки изменения значения сигнала {@link selected}.
-     * По изменении значения сигнала меняет
-     * цвет фона в зависимости от состояния {@link selected}.
-     */
-    private onSelectedChanged() {
-        const selected = this.selected();
-
-        untracked(() => {
-            const componentRef = this.componentRef();
-            if (!componentRef) return;
-
-            const componentElement = componentRef.nativeElement;
-
-            if (selected) {
-                // Если кнопка выбрана, задать цвет фона.
-                componentElement.style.background = "var(--p-primary-500)";
-            } else if (componentElement.matches(":hover")) {
-                // Если мышь наведена и кнопка не выбрана, задать цвет фона.
-                componentElement.style.background = "var(--p-primary-200)";
-            } else {
-                // Если мышь не наведена и кнопка не выбрана, задать цвет фона.
-                componentElement.style.background = "var(--p-primary-100)";
-            }
-        });
-    }
-
-    constructor() {
-        effect(this.onHoveredChanged.bind(this));
-        effect(this.onSelectedChanged.bind(this));
     }
 }

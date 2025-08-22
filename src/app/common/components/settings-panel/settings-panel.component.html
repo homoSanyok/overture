@@ -1,8 +1,10 @@
-<div class="container" #componentRef>
-  @for (link of SettingsLinks; track link.id) {
-    <app-button [link]="link"
-                [selected]="selectedMenu() === link.id"
-                (click)="onClick(link.id)"
-    ></app-button>
-  }
+<div #componentRef
+     class="container"
+     [class.opened]="isOpened()">
+    @for (link of SettingsLinks; track link.id) {
+        <app-button [link]="link"
+                    [selected]="selectedMenu() === link.id"
+                    (click)="onClick(link.id)"
+        ></app-button>
+    }
 </div>

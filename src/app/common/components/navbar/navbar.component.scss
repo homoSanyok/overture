@@ -21,14 +21,17 @@
     }
 
     &-edit-button {
+      visibility: hidden;
+
       transform: scale(0);
       position: absolute;
       top: 7px;
       left: 46px;
 
-      transition: transform 300ms;
+      transition: transform var(--transition);
     }
     &-edit-button.visible {
+      visibility: visible;
       transform: scale(1);
     }
   }

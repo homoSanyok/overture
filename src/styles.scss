@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -6,9 +7,16 @@ html, body {
   position: relative;
 }
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .resizable-handle {
   min-width: 20px;
   min-height: 20px;
+}
+
+:root {
+  --transition: 300ms;
 }

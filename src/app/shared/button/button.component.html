@@ -1,8 +1,9 @@
-<div
+<button
   class="container"
+  [class.hovered]="hovered()"
+  [class.selected]="selected()"
   [style.width]="_size() === 'm' ? '38px' : '24px'"
   [style.height]="_size() === 'm' ? '38px' : '24px'"
-  #componentRef
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
   [pTooltip]="sortable() ? undefined : label()"
@@ -22,4 +23,4 @@
     [height]="_size() === 'm' ? 24 : 16"
   />
   }
-</div>
+</button>

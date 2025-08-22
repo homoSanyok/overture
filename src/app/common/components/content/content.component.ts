@@ -90,7 +90,7 @@ export class ContentComponent implements AfterViewInit {
                     // Если было выбрано меню редактирования элемента link.
 
                     // Задаёт анимации при изменении размеров и положения относительно родительского компонента.
-                    componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
+                    componentElement.style.transition = "width var(--transition), height var(--transition), margin-left var(--transition), margin-top var(--transition)";
 
                     // Относительные высота и ширина открываемого меню.
                     let width = parentElement.clientWidth * (isMobile ? 1 : .6);
@@ -114,7 +114,7 @@ export class ContentComponent implements AfterViewInit {
                     // Если выбрано меню выбора цветовой схемы приложения.
 
                     // Задаёт анимации при изменении размеров и положения относительно родительского компонента.
-                    componentElement.style.transition = "width 300ms, height 300ms, margin-left 300ms, margin-top 300ms";
+                    componentElement.style.transition = "width var(--transition), height var(--transition), margin-left var(--transition), margin-top var(--transition)";
 
                     // Относительные высота и ширина открываемого меню.
                     let width = parentElement.clientWidth * (isMobile ? 1 : .2);
@@ -228,7 +228,7 @@ export class ContentComponent implements AfterViewInit {
         if (!parentElement) return;
 
         // Включение анимаций при изменении размеров.
-        parentElement.style.transition = "width 300ms, height 300ms";
+        parentElement.style.transition = "width var(--transition), height var(--transition)";
 
         if (element.classList.contains("resizable-handle-s")) {
             // Если пользователем была выбрана нижняя область,
@@ -338,7 +338,7 @@ export class ContentComponent implements AfterViewInit {
             if (!componentElement) return;
 
             // Включает анимации для плавного возврата размеров в исходное состояние.
-            componentElement.style.transition = "width 300ms, height 300ms";
+            componentElement.style.transition = "width var(--transition), height var(--transition)";
 
             // Задаёт меню максимальные значения.
             componentElement.style.width = "100%";
@@ -346,7 +346,7 @@ export class ContentComponent implements AfterViewInit {
 
             setTimeout(() => {
                 // Выключает анимации после их завершения.
-                componentElement.style.transition = "width 300ms, height 300ms";
+                componentElement.style.transition = "width var(--transition), height var(--transition)";
             }, 300);
 
             // Сбрасывает состояние ресайза.

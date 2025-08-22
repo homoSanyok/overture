@@ -12,14 +12,28 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background, width 200ms;
+  transition: background, width var(--transition);
   user-select: none;
+  border: none;
+  background: var(--p-primary-100);
 
   &__icon {
     rotate: 0deg;
-    transition: transform 300ms;
+    transition: transform var(--transition);
   }
   &__icon.rotated {
     transform: rotate(90deg);
   }
+}
+.container.hovered {
+  background: var(--p-primary-200) !important;
+}
+.container.selected {
+  width: 70px;
+  background: var(--p-primary-500) !important;
+}
+.container:focus-visible {
+  outline: none;
+  border: solid 2px var(--p-primary-500) !important;
+  background: var(--p-primary-300) !important;
 }

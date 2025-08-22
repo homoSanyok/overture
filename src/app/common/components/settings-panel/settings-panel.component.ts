@@ -23,10 +23,6 @@ import {SettingsLinks} from "../../constants/SettingsLinks";
  * доступных меню настроек.
  */
 export class SettingsPanelComponent {
-    /**
-     * {@link SettingsService}
-     * @private
-     */
     private readonly settings = inject(SettingsService);
 
     readonly SettingsLinks= SettingsLinks;
@@ -51,6 +47,13 @@ export class SettingsPanelComponent {
         }
 
         return this.settings.selectedMenu();
+    });
+
+    /**
+     * Возвращает {@link SettingsService.open} для шаблона.
+     */
+    readonly isOpened = computed(() => {
+       return this.settings.open();
     });
 
     /**
@@ -124,4 +127,6 @@ export class SettingsPanelComponent {
     constructor() {
         effect(this.onSettingsOpen.bind(this));
     }
+
+    protected readonly open = open;
 }
