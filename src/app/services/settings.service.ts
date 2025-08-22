@@ -29,7 +29,7 @@ export class SettingsService {
     /**
      * Сигнал хранит состояние выбранного элемента link.
      */
-    readonly selectedLink = signal<LinkT | undefined>(undefined);
+    readonly selectedLink = signal<LinkT | undefined>(this.readStorageSelectedLink());
 
     /**
      * Сигнал хранит состояние выбранного элемента link для редактирования.
@@ -83,7 +83,7 @@ export class SettingsService {
      * Функция вызывается при запуске сервиса.
      * @private
      */
-    private setStoragePreset() {
+    private readStoragePreset() {
         const storagePresetName = localStorage.getItem("preset") as PresetNameT | null;
         if (!storagePresetName) {
             // Если пресета в локальной памяти нет,
@@ -106,6 +106,19 @@ export class SettingsService {
     }
 
     /**
+     * Функция читает из локальной памяти значение последней выбранной
+     * пользователем ссылки и возвращает её.
+     * Используется для присвоения сигналу {@link selectedLink} начального значения.
+     * @private
+     */
+    private readStorageSelectedLink() {
+        const selectedLink = localStorage.getItem("selectedLink");
+        if (!selectedLink) return;
+
+        return JSON.parse(selectedLink) as LinkT;
+    }
+
+    /**
      * Обработка изменения состояния открытия меню настроек {@link open}.
      * Если меню закрыто, задаёт сигналу {@link selectedMenu},
      * определяющему текущее открытое меню настроек, значение `undefined`.
@@ -125,11 +138,29 @@ export class SettingsService {
         });
     }
 
+    /**
+     * Функция обработки изменения значения сигнала {@link selectedLink}.
+     * По изменении записывает значение в локальную память.
+     * @private
+     */
+    private onSelectedLinkChanged() {
+        const selectedLink = this.selectedLink();
+        if (!selectedLink) {
+            // Если ссылка не выбрана, чистит локальную память.
+            localStorage.removeItem("selectedLink");
+            return;
+        }
+
+        // Если выбрана ссылка, записывает её в локальную память.
+        localStorage.setItem("selectedLink", JSON.stringify(selectedLink));
+    }
+
     constructor() {
         effect(this.onLinksChanged.bind(this));
         effect(this.onOpenChanged.bind(this));
         effect(this.onSelectedPresetChanged.bind(this));
+        effect(this.onSelectedLinkChanged.bind(this));
 
-        this.setStoragePreset();
+        this.readStoragePreset();
     }
 }
