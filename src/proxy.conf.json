@@ -1,0 +1,21 @@
+{
+  "/accessor": {
+    "target": "https://ngw.devices.sberbank.ru:9443/api/v2/oauth",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/accessor": ""
+    }
+  },
+
+  "/model": {
+    "target": "https://gigachat.devices.sberbank.ru/api/v1/chat/completions",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/model": ""
+    }
+  }
+}

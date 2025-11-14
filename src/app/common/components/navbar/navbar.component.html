@@ -1,45 +1,40 @@
 <div class="container">
-    <div class="container__content"
-         #linksList>
-        @for (link of _links(); track link.id) {
-            <div class="container__content-button">
-                <app-button [link]="link"
-                            [selected]="selectedLink()?.id === link.id && !selectedEditingLink()"
-                            (click)="onClickLink(link)"
-                ></app-button>
+  <div id="#navbar" class="container__content" #linksList>
+    @for (link of _links(); track link.id) {
+    <div class="container__content-button">
+      <app-button
+        id="link-button"
+        [link]="link"
+        [selected]="selectedLink()?.id === link.id && !selectedEditingLink()"
+        (click)="onClickLink(link)"
+      ></app-button>
 
-                @let editButton = {
-                    id: link.id,
-                    iconSrc: "edit.svg",
-                    label: "",
-                    path: "",
-                };
+      @let editButton = { id: link.id, iconSrc: "edit.svg", label: "", path: "",
+      };
 
-                <div class="container__content-edit-button"
-                     [class.visible]="settingsOpen()">
-                    <app-button
-                            [link]="editButton"
-                            [selected]="selectedEditingLink()?.id === link.id"
-                            size="s"
-                            (click)="onClickEditingLink(link)"
-                    ></app-button>
-                </div>
-            </div>
-        }
-    </div>
-    @if (isResized()) {
-        @let resizeButton =
-            {
-                id: "resizeButton",
-                iconSrc: "reset-size.svg",
-                label: "Сбросить размер",
-                path: "",
-            };
-        <app-button class="resize-button"
-                    [link]="resizeButton"
-                    size="s"
-                    (click)="onClickResizeButton()"
+      <div
+        class="container__content-edit-button"
+        [class.visible]="settingsOpen()"
+      >
+        <app-button
+          id="edit-link-button"
+          [link]="editButton"
+          [selected]="selectedEditingLink()?.id === link.id"
+          size="s"
+          (click)="onClickEditingLink(link)"
         ></app-button>
+      </div>
+    </div>
     }
-    <app-settings-button></app-settings-button>
+  </div>
+  @if (isResized()) { @let resizeButton = { id: "resizeButton", iconSrc:
+  "reset-size.svg", label: "Сбросить размер", path: "", };
+  <app-button
+    class="resize-button"
+    [link]="resizeButton"
+    size="s"
+    (click)="onClickResizeButton()"
+  ></app-button>
+  }
+  <app-settings-button></app-settings-button>
 </div>
