@@ -1,6 +1,6 @@
 {
   "name": "overture",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "scripts": {
     "ng": "ng",
     "start": "npx rimraf .angular/cache && ng serve",
