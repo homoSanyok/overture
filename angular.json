@@ -15,11 +15,14 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/overture",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "xml-js"
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -34,33 +37,140 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "vendorChunk": false,
+            "commonChunk": true,
+            "namedChunks": false,
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            }
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": true
+              },
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1.6MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1MB"
                 }
               ],
-              "outputHashing": "all"
+              "sourceMap": {
+                "scripts": false,
+                "styles": false
+              },
+              "outputHashing": "all",
+              "vendorChunk": false,
+              "commonChunk": true,
+              "aot": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "statsJson": true
+            },
+            "local": {
+              "optimization": {
+                "scripts": false,
+                "styles": {
+                  "minify": false,
+                  "inlineCritical": false
+                },
+                "fonts": false
+              },
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1.6MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1MB"
+                }
+              ],
+              "sourceMap": {
+                "scripts": true,
+                "styles": true
+              },
+              "outputHashing": "all",
+              "aot": true,
+              "vendorChunk": false,
+              "commonChunk": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "statsJson": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
             },
             "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": true
+              },
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1.6MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "0.5MB",
+                  "maximumError": "1MB"
+                }
+              ],
+              "sourceMap": {
+                "scripts": false,
+                "styles": false
+              },
+              "outputHashing": "all",
+              "aot": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "statsJson": true,
+              "vendorChunk": false,
+              "commonChunk": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "host": "0.0.0.0",
+            "prebundle": {
+              "exclude": [
+                "anchor-assistant"
+              ]
+            }
+          },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
@@ -68,9 +178,12 @@
             },
             "development": {
               "buildTarget": "overture:build:development"
+            },
+            "local": {
+              "buildTarget": "overture:build:local"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -78,6 +191,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "browsers": false,
             "polyfills": [
               "zone.js",
               "zone.js/testing"
@@ -93,6 +207,11 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
             "scripts": []
           }
         },

@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
 import { SettingsService } from './services/settings.service';
 import { ContentComponent } from './common/components/content/content.component';
-import { ResizeService } from "./services/resize.service";
+import { ResizerService } from "./services/resizer.service";
 import { LinksService } from "./services/links.service";
 
-import { AnchorAssistant, Anchor, GigaChat } from "anchor-assistant";
+import { AnchorAssistant, Anchor, OpenAPI } from "anchor-assistant";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import { AnchorAssistant, Anchor, GigaChat } from "anchor-assistant";
     NavbarComponent,
     ContentComponent
   ],
-  providers: [SettingsService, ResizeService, LinksService],
+  providers: [SettingsService, ResizerService, LinksService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -48,13 +48,11 @@ export class AppComponent {
       }
     ];
 
-    const connector = new GigaChat(anchors, {
-      accessor_url: "/accessor",
-      model_url: "/model",
-
-      authorization_key: "OWEzNmJkZmEtOWMwNi00OTg2LTlkOTYtZGMwYzcxNDNhMjZiOmRmNjdhYWRlLWNkNjgtNDJhOS1hNjI3LTg3ZmVkNWQ2NGE4Yw==",
-      scope: "GIGACHAT_API_PERS",
-      model: "GigaChat-2"
+    const connector = new OpenAPI(anchors, {
+      model: "qwen2.5-3b-lora",
+      max_tokens: 64,
+      temperature: 0,
+      model_url: "http://localhost:8000/v1/chat/completions"
     });
     new AnchorAssistant(connector, undefined, { delay: 300 });
   }

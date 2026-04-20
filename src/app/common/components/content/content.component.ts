@@ -1,16 +1,16 @@
 /**
  * @module ContentComponent
  */
-import {AfterViewInit, Component, computed, effect, ElementRef, inject, untracked, viewChild} from '@angular/core';
-import {SettingsService} from '../../../services/settings.service';
-import {IframeComponent} from '../iframe/iframe.component';
-import {SettingsMenuEditComponent} from "../settings-menu-edit/settings-menu-edit.component";
-import {SettingsMenuPaletteComponent} from "../settings-menu-palette/settings-menu-palette.component";
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, untracked, viewChild } from '@angular/core';
+import { SettingsService } from '../../../services/settings.service';
+import { IframeComponent } from '../iframe/iframe.component';
+import { SettingsMenuEditComponent } from "../settings-menu-edit/settings-menu-edit.component";
+import { SettingsMenuPaletteComponent } from "../settings-menu-palette/settings-menu-palette.component";
 
 // @ts-ignore
 import Resizable from "resizable"
-import {DeviceDetectorService} from "ngx-device-detector";
-import {ResizeService} from "../../../services/resize.service";
+import { DeviceDetectorService } from "ngx-device-detector";
+import { ResizerService } from "../../../services/resizer.service";
 
 @Component({
     selector: 'app-content',
@@ -29,7 +29,7 @@ import {ResizeService} from "../../../services/resize.service";
  */
 export class ContentComponent implements AfterViewInit {
     private readonly settings = inject(SettingsService);
-    private readonly resize = inject(ResizeService);
+    private readonly resizer = inject(ResizerService);
 
     /**
      * Объект Resizable.
@@ -74,13 +74,13 @@ export class ContentComponent implements AfterViewInit {
             const parentElement = componentElement.parentElement;
             if (!parentElement) return;
 
-            const resize = this.resize.resize();
+            const resize = this.resizer.size();
 
             try {
                 // Если выбрано какое-либо меню, кроме основного,
                 // отключает возможность ресайза.
                 this.resizable.destroy();
-            } catch {}
+            } catch { }
 
             // Открыто ли приложение на мобильном устройстве
             const isMobile = this.device.isMobile();
@@ -290,7 +290,7 @@ export class ContentComponent implements AfterViewInit {
 
             // Если было начато действие ресайза,
             // задаёт состоянию ресайза значение ширины и высоты окна.
-            this.resize.resize.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
+            this.resizer.size.set({ w: `${componentElement.clientWidth}px`, h: `${componentElement.clientHeight}px` });
         });
 
         this.resizable.on("resizeend", () => {
@@ -299,7 +299,7 @@ export class ContentComponent implements AfterViewInit {
                 // Сбрасывает каждую область перетаскивания
                 // до начальных размеров и анимации эмуляцией
                 // события снятия мыши с области перетаскивания.
-                const event = {target: area};
+                const event = { target: area };
                 this.onAreaMouseUp(event as any as Event);
             });
 
@@ -309,7 +309,7 @@ export class ContentComponent implements AfterViewInit {
             if ((window.innerWidth - 62) === componentElement.clientWidth && (window.innerHeight - 16) === componentElement.clientHeight) {
                 // Если ширина и высота основного окна равны максимальным,
                 // значит сбрасывает состояние ресайза.
-                this.resize.resize.set(undefined)
+                this.resizer.size.set(undefined);
                 return;
             }
 
@@ -321,9 +321,14 @@ export class ContentComponent implements AfterViewInit {
             const percentWidth = (componentElement.clientWidth * 100) / parentElement.clientWidth;
             const percentHeight = (componentElement.clientHeight * 100) / parentElement.clientHeight;
 
+            // Присваиваю элементу новые размеры в процентах,
+            // чтобы ресайз не сломал компонент при изменении размера родителского контейнера
+            componentElement.style.width = `${percentWidth}%`;
+            componentElement.style.height = `${percentHeight}%`;
+
             // Если размеры не максимальны, значит задаёт состоянию ресайза
             // текущие значения.
-            this.resize.resize.set({ w: `${percentWidth}%`, h: `${percentHeight}%` });
+            this.resizer.size.set({ w: `${percentWidth}%`, h: `${percentHeight}%` });
         });
 
         this.initResizableAreas();
@@ -350,7 +355,7 @@ export class ContentComponent implements AfterViewInit {
             }, 300);
 
             // Сбрасывает состояние ресайза.
-            this.resize.resize.set(undefined);
+            this.resizer.size.set(undefined);
         });
     }
 

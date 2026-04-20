@@ -1,7 +1,7 @@
 /**
  * @module ResizeService
  */
-import {effect, Injectable, signal} from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 
 @Injectable()
 /**
@@ -10,7 +10,7 @@ import {effect, Injectable, signal} from '@angular/core';
  *
  * Выделен для сохранения параметров ресайза в локальную память.
  */
-export class ResizeService {
+export class ResizerService {
     /**
      * Сигнал хранит состояние текущих размеров меню.
      * Если размер области стандартный, то значением сигнала будет `undefined`.
@@ -18,7 +18,7 @@ export class ResizeService {
      * Если размер области был изменён, то в сигнал запишутся значения размеров области
      * и в навигационной панели появится кнопка возврата размера в исходное состояние.
      */
-    readonly resize = signal<{ w: string, h: string } | undefined>(this.readStorageResize());
+    readonly size = signal<{ w: string, h: string } | undefined>(this.readStorageSize());
 
     /**
      * Возвращает храняющуюся в локальной памяти конфигурацию
@@ -26,8 +26,8 @@ export class ResizeService {
      *
      * @private
      */
-    private readStorageResize() {
-        const storageData = localStorage.getItem("resize");
+    private readStorageSize() {
+        const storageData = localStorage.getItem("size");
         if (!storageData) return;
 
         return JSON.parse(storageData) as { w: string, h: string };
@@ -39,13 +39,13 @@ export class ResizeService {
      * @private
      */
     private onResizeChanged() {
-        const resize = this.resize();
+        const resize = this.size();
         if (!resize) {
-            localStorage.removeItem("resize");
+            localStorage.removeItem("size");
             return;
         }
 
-        localStorage.setItem("resize", JSON.stringify(this.resize()));
+        localStorage.setItem("size", JSON.stringify(this.size()));
     }
 
     constructor() {

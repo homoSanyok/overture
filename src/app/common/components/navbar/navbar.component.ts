@@ -2,14 +2,14 @@
  * @module NavbarComponent
  */
 
-import {Component, computed, ElementRef, inject, OnInit, viewChild} from '@angular/core';
-import {SettingsButtonComponent} from '../settings-button/settings-button.component';
-import {SettingsService} from '../../../services/settings.service';
-import {ButtonComponent} from '../../../shared/button/button.component';
-import {LinkT} from '../../types/LinkT';
+import { Component, computed, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { SettingsButtonComponent } from '../settings-button/settings-button.component';
+import { SettingsService } from '../../../services/settings.service';
+import { ButtonComponent } from '../../../shared/button/button.component';
+import { LinkT } from '../../types/LinkT';
 import Sortable from "sortablejs";
-import {ResizeService} from "../../../services/resize.service";
-import {LinksService} from "../../../services/links.service";
+import { ResizerService } from "../../../services/resizer.service";
+import { LinksService } from "../../../services/links.service";
 
 @Component({
     selector: 'app-navbar',
@@ -30,7 +30,7 @@ import {LinksService} from "../../../services/links.service";
  */
 export class NavbarComponent implements OnInit {
     private readonly settings = inject(SettingsService);
-    private readonly resize = inject(ResizeService);
+    private readonly resizer = inject(ResizerService);
     private readonly links = inject(LinksService);
 
     /**
@@ -78,7 +78,7 @@ export class NavbarComponent implements OnInit {
         const selectedMenu = this.settings.selectedMenu();
         if (!selectedMenu) {
             // Если выбрано основное меню
-            return Boolean(this.resize.resize());
+            return Boolean(this.resizer.size());
         }
 
         return false;

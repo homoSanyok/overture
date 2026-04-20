@@ -1,8 +1,8 @@
 /**
  * @module LinksService
  */
-import {effect, Injectable, signal, untracked} from '@angular/core';
-import {LinkT} from "../common/types/LinkT";
+import { effect, Injectable, signal, untracked } from '@angular/core';
+import { LinkT } from "../common/types/LinkT";
 
 @Injectable()
 /**

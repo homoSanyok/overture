@@ -1,25 +1,26 @@
-<button class="container"
-        [class.hovered]="hovered()"
-        [class.selected]="selected()"
-        [style.width]="_size() === 'm' ? '38px' : '24px'"
-        [style.height]="_size() === 'm' ? '38px' : '24px'"
-        (mouseenter)="onMouseEnter()"
-        (mouseleave)="onMouseLeave()"
-        [pTooltip]="sortable() ? undefined : label()"
-        tooltipPosition="right"
-        showDelay="500"
+<button
+  class="container"
+  [class.hovered]="hovered()"
+  [class.selected]="selected()"
+  [style.width]="_size() === 'm' ? '38px' : '24px'"
+  [style.height]="_size() === 'm' ? '38px' : '24px'"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  [pTooltip]="sortable() ? undefined : label()"
+  tooltipPosition="right"
+  showDelay="500"
 >
-    @if (icon()) {
-        <img
-                [src]="icon()"
-                [width]="_size() === 'm' ? 24 : 16"
-                [height]="_size() === 'm' ? 24 : 16"
-        />
-    } @else {
-        <img
-                src="image.svg"
-                [width]="_size() === 'm' ? 24 : 16"
-                [height]="_size() === 'm' ? 24 : 16"
-        />
-    }
+  @if (icon()) {
+    <img
+      [src]="icon()"
+      [width]="_size() === 'm' ? 24 : 16"
+      [height]="_size() === 'm' ? 24 : 16"
+    />
+  } @else {
+    <img
+      src="image.svg"
+      [width]="_size() === 'm' ? 24 : 16"
+      [height]="_size() === 'm' ? 24 : 16"
+    />
+  }
 </button>
